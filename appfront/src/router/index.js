@@ -38,7 +38,7 @@ export default new Router({
         	path: 'ModelList',
         	name: 'ModelList',
         	component: ModelList,
-        }
+        },
       ]
     }
   ]

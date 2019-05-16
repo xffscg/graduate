@@ -22,4 +22,5 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('myapp.urls')),
+    path('', TemplateView.as_view(template_name="index.html")),
 ]

@@ -9,25 +9,41 @@
       </el-table>
     </div>
     <div>
+      <el-button type="primary">主要按钮bababab</el-button>
       <button @click="demo">try</button>
     </div>
   </div>
 </template>
 
 <script>
+  var BASE_URL = "http://localhost:15050/api/";
   export default {
     data(){
       return {
         tabelData:[{
           id: 8
         }],
+        dataList : [],
         target: 7,
         array:[[1, 2, 8, 9],[2, 4, 9, 12],[4, 7, 10, 13],[6, 8, 11, 15]],
 
       }
     },
     methods:{
+      getList(){
+        this.$http.get(BASE_URL + 'get_file_list')
+          .then((response) => {
+            console.log(response.body);
+            this.dataList = response.body.DATA;
+          }, (response) => {
+		        	console.log('请求失败了');
+		        	alert("请求list失败，请刷新重试哦");
+		        });
+        // var res = get_file_list();
+      },
+
       demo(){
+        this.getList();
         var num = this.target;
         var old = this.array;
         var res = this.find(num, old);
@@ -38,7 +54,6 @@
 
       find(target, array){
           // write code here
-          debugger;
           var m = array.length -1;
           var n = array[0].length -1;
           console.log(m);

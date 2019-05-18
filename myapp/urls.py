@@ -4,4 +4,5 @@ import myapp.views
 urlpatterns = [
     url(r'hello$', myapp.views.hello, ),
     url(r'get_file_list$', myapp.views.data_filelist, ),
+    url(r'result_list$', myapp.views.result_list, ),
 ]

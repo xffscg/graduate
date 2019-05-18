@@ -25,3 +25,10 @@ def data_filelist(request):
     output = data_file.get_all_data_files_infolist()
 
     return HttpResponse(json.dumps(output), content_type='application/json')
+
+
+def result_list(request):
+    user_id = request.GET.get("userid")
+    result_file = myapp.models.Result()
+    output_result = result_file.get_result(user_id)
+    return HttpResponse(json.dumps(output_result), content_type='application/json')

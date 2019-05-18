@@ -261,7 +261,7 @@ class Model(models.Model):
 
 
 class Result(models.Model):
-    userid = models.IntegerField(db_column='userId', blank=True, null=True)  # Field name made lowercase.
+    userId = models.IntegerField(blank=True, null=True)  # Field name made lowercase.
     jobid = models.IntegerField(db_column='jobId', blank=True, null=True)  # Field name made lowercase.
     filename = models.CharField(max_length=200, blank=True, null=True)
     createdon = models.DateTimeField(blank=True, null=True)
@@ -271,6 +271,27 @@ class Result(models.Model):
     class Meta:
         managed = False
         db_table = 'result'
+
+    def get_result(self, user_id):
+        # all_rows_result = Result.objects.filter(userid=user_id)
+        all_rows_result = Result.objects.filter(userId=user_id)
+        output_result = dict()
+        print(len(all_rows_result))
+        if all_rows_result is not None and len(all_rows_result) > 0:
+            output_result["data_status"] = True
+            output_result["DATA"] = []
+            for row in all_rows_result:
+                row_dict = dict()
+                row_dict["jobId"] = row.jobid
+                row_dict["path"] = row.path
+                row_dict["filename"] = row.filename
+                row_dict["createdon"] = row.createdon
+                output_result["DATA"].append(row_dict)
+        else:
+            output_result["data_status"] = False
+
+        return output_result
+
 
 
 class User(models.Model):

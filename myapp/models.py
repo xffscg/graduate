@@ -243,7 +243,7 @@ class Job(models.Model):
 
 
 class Model(models.Model):
-    userid = models.IntegerField(db_column='userId')  # Field name made lowercase.
+    userId = models.IntegerField(db_column='userId')  # Field name made lowercase.
     jobid = models.IntegerField(db_column='jobId')  # Field name made lowercase.
     modelname = models.CharField(db_column='modelName', max_length=100)  # Field name made lowercase.
     algoname = models.CharField(db_column='algoName', max_length=50)  # Field name made lowercase.
@@ -259,6 +259,28 @@ class Model(models.Model):
         managed = False
         db_table = 'model'
 
+    def get_model(self, user_id):
+        all_rows_model = Model.objects.filter(userId=user_id)
+        output_model = dict()
+        if all_rows_model is not None and len(all_rows_model) > 0:
+            output_model["data_status"] = True
+            output_model["DATA"] = []
+            for row in all_rows_model:
+                row_dict = dict()
+                row_dict["jobId"] = row.jobid
+                row_dict["modelname"] = row.modelname
+                row_dict["algoname"] = row.algoname
+                row_dict["datasetname"] = row.datasetname
+                row_dict["modelpath"] = row.modelpath
+                row_dict["createdon"] = row.createtime
+                row_dict["time"] = row.time
+                row_dict["status"] = row.status
+                output_model["DATA"].append(row_dict)
+        else:
+            output_model["data_status"] = False
+
+        return output_model
+
 
 class Result(models.Model):
     userId = models.IntegerField(blank=True, null=True)  # Field name made lowercase.
@@ -273,10 +295,8 @@ class Result(models.Model):
         db_table = 'result'
 
     def get_result(self, user_id):
-        # all_rows_result = Result.objects.filter(userid=user_id)
         all_rows_result = Result.objects.filter(userId=user_id)
         output_result = dict()
-        print(len(all_rows_result))
         if all_rows_result is not None and len(all_rows_result) > 0:
             output_result["data_status"] = True
             output_result["DATA"] = []

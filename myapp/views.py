@@ -32,3 +32,10 @@ def result_list(request):
     result_file = myapp.models.Result()
     output_result = result_file.get_result(user_id)
     return HttpResponse(json.dumps(output_result), content_type='application/json')
+
+
+def model_list(request):
+    user_id = request.GET.get("userid")
+    model_file = myapp.models.Model()
+    output_model = model_file.get_model(user_id)
+    return HttpResponse(json.dumps(output_model), content_type='application/json')

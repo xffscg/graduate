@@ -1,17 +1,57 @@
 <template>  
   <div class="container">
-  	<div class="Ttitle">
-	    数据集列表
-	  </div>
-    <div class="Ltable">
-      <el-table :data="tabelData">
-        <el-table-column label="id"></el-table-column>
-      </el-table>
-    </div>
-    <div>
-      <el-button type="primary">主要按钮bababab</el-button>
-      <button @click="demo">try</button>
-    </div>
+  	<el-col :span="6"><div class="grid-content">
+      <div class ="file">
+        <div class="upload">
+          <div class="icon_up">
+            <i class="el-icon-folder-add"></i>
+          </div>
+          <div class="up_load_text">
+            <!--<el-button type="primary" plain>上传数据集</el-button>-->
+            <el-button type="primary" plain @click="dialogVisible2 = true"><span class="glyphicon glyphicon-upload"></span>上传文件</el-button>
+            <el-dialog :visible.sync="dialogVisible2" title="上传文件">
+              <el-form :model="fileInfo" label-width="140px">
+                <el-form-item label="数据集名称">
+                  <el-select
+                    v-model="fileInfo.name" filterable  allow-create  default-first-option
+                    placeholder="请选择数据集">
+                    <el-option
+                      v-for="item in set_option"
+                      :key="item"
+                      :label="item"
+                      :value="item">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="第一行有效">
+                  <el-switch
+										  style="display: inline;"
+										  v-model="fileInfo.firstLine"
+										  active-color="#13ce66"
+										  inactive-color="#ff4949"
+										  active-text="有列头（无效）"
+										  inactive-text="无列头（有效）">
+										</el-switch>
+                </el-form-item>
+                <el-form-item label="分隔符">
+										<el-input v-model="fileInfo.separate"></el-input>
+									</el-form-item>
+                <el-form-item label="选择文件">
+										<input type="file" name="myfiles" id="fileload" multiple>
+									</el-form-item >
+              </el-form>
+              <span slot="footer" class="dialog-footer">
+									<el-button @click="dialogVisible2 = false">取 消</el-button>
+									<el-button id="submit1" type="primary" @click="submitfileinfor">确 定</el-button>
+								</span>
+            </el-dialog>
+          </div>
+        </div>
+      </div>
+    </div></el-col>
+    <el-col :span="18"><div class="grid-content">
+      <p>xxxxxx</p>
+    </div></el-col>
   </div>
 </template>
 
@@ -26,6 +66,13 @@
         dataList : [],
         target: 7,
         array:[[1, 2, 8, 9],[2, 4, 9, 12],[4, 7, 10, 13],[6, 8, 11, 15]],
+        dialogVisible2:false,
+        fileInfo:{
+          name:'',
+          firstLine:true,
+          separate:''
+        },
+        set_option:['xff','scg']
 
       }
     },
@@ -39,8 +86,69 @@
 		        	console.log('请求失败了');
 		        	alert("请求list失败，请刷新重试哦");
 		        });
-        // var res = get_file_list();
       },
+      handleClose(done) {
+				this.$confirm('确认关闭？')
+				.then(_ => {
+					done();
+				})
+				.catch(_ => {});
+			},
+      submitfileinfor: function(){
+        console.log('ssss');
+				// var obj ={}
+				// obj.fileAddr = $('#fileload').val();
+				// obj.filename = $('#fileload').attr('name');
+				// obj.fileID = $('#fileload').attr('id');
+				// if(obj.fileAddr == "" || obj.fileAddr == null){
+				// 	alert('请选择文件')
+				// }
+				// console.log(obj)
+				// console.log(this.fileForm)
+				// var FL= '';
+				// if(this.fileForm.firstLine == true){
+				// 	FL = '1';
+				// }else{
+				// 	FL = '0';
+				// }
+        //
+				// if(this.fileForm.name == ''  || this.fileForm.separate == ''){
+				// 	alert('文件名称或者分隔符不能为空');
+				// }else{
+				// 	var formData = new FormData();
+				// 	formData.append('file',$('#fileload')[0].files[0]);
+				// 	formData.append('name',this.fileForm.name);
+				// 	formData.append('firstLine',FL);
+				// 	formData.append('separate',this.fileForm.separate);
+				// 	console.log(formData);
+				// 	console.log($('#fileload')[0].files[0]);
+				// 	var that = this;
+				// 	$.ajax({
+				// 		url:BASE_URL +'api/uploadDataFile',
+				// 		type:'POST',
+				// 		data:formData,
+				// 		cache:false,
+				// 		processData:false,
+				// 		contentType:false
+				// 	})
+        //
+				// 	.done(function(data){
+				// 		alert(0);
+				// 		var regx=/(\{.*})/;
+				// 		var data = data.match(regx)[0];
+				// 		data = JSON.parse(data);
+				// 		console.log(data);
+				// 		that.dialogVisible2 = false;
+				// 		this.getlist();
+        //
+				// 	})
+				// 	.fail(function(res){console.log(res);});
+				// 	this.$nextTick(() => {
+				// 		this.getlist();
+				// 		this.dialogVisible2 =false;
+				// 	})
+				// }
+			},
 
       demo(){
         this.getList();
@@ -96,17 +204,27 @@
     height: 100%;
     background: #FFFAFA;
   }
-  .container .Ttitle {
-    width: 100%;
-    height: 40px;
+  .file {
+    width: 98%;
+    height: 100%;
     padding-top: 10px;
     text-align: center;
     font-size: 18px;
   }
-  .container .Ltable {
-    width: 100%;
-    height: 500px;
-    padding-top: 10px;
+  .upload {
+    width: 98%;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 30px;
+  }
+  .icon_up {
+    float: left;
+    font-size: 30px;
+    padding-top: 5px;
+  }
+  .up_load_text {
+    float: left;
+    margin-left: 20px;
   }
   
 </style>

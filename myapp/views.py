@@ -2,7 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
 import myapp.models
+import os
 from flask import Flask, render_template,send_file, json, request,redirect,session,jsonify
+import time
+from time import strftime
 
 # Create your views here.
 
@@ -39,3 +42,29 @@ def model_list(request):
     model_file = myapp.models.Model()
     output_model = model_file.get_model(user_id)
     return HttpResponse(json.dumps(output_model), content_type='application/json')
+
+
+def uploadDataFile(request):
+    path = r'D:\bupt\upload'
+    set_name = request.POST.get('name')
+    print(set_name)
+    firstLine = request.POST.get('firstLine')
+    separate = request.POST.get('separate')
+    user_id = request.POST.get('userId')
+    file = request.FILES.get('file')
+    current_path1 = path + "\\" + set_name
+    current_path = path + "\\" + set_name + '\\' + file.name
+    filename = file.name
+    create = strftime("%Y%m%d%H%M%S")
+    dataset_file = myapp.models.Datasetall()
+    datafile_file = myapp.models.Datafileall()
+    datafile_file.insert_file(user_id, filename, current_path, set_name, separate, firstLine, create)
+    if not dataset_file.query_set_name(user_id, set_name):
+        dataset_file.insert_set(user_id, set_name, current_path1, create)
+    if not os.path.exists(current_path1):
+        os.mkdir(current_path1)
+    with open(current_path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
+    return HttpResponse(json.dumps({'status': "success"}), content_type='application/json')

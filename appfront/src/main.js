@@ -6,6 +6,7 @@ import VueResource from 'vue-resource';
 import 'element-ui/lib/theme-chalk/index.css';
 import App from './App'
 import router from './router'
+import 'jquery'
 
 Vue.use(ElementUI);
 Vue.use(VueResource);

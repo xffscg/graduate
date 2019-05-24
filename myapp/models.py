@@ -141,9 +141,45 @@ class Datafile(models.Model):
         return output
 
 
+class Datafileall(models.Model):
+    fileId = models.IntegerField(db_column='fileId', primary_key=True)  # Field name made lowercase.
+    userId = models.IntegerField(db_column='userId', blank=True, null=True)
+    filename = models.TextField(db_column='filename', blank=True, null=True)
+    path = models.TextField(db_column='path', blank=True, null=True)
+    setname = models.CharField(db_column='setname', max_length=40, blank=True, null=True)  # Field name made lowercase.
+    separate = models.CharField(max_length=10, blank=True, null=True)
+    first = models.CharField(max_length=10, blank=True, null=True)  # Field name made lowercase.
+    createtime = models.CharField(db_column='createtime', max_length=40, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'datafileall'
+
+    def get_all_data_files_infolist(self):
+        # self.cursor.execute(
+        #     """SELECT jobId, path,filename, createdon FROM datafile WHERE userid=%s AND isdeleted = 0""",
+        #     )
+        # all_rows = self.cursor.fetchall()
+        all_rows = Datafileall.objects.filter(userid=4)
+        output = dict()
+        if all_rows is not None and len(all_rows) > 0:
+            output["data_status"] = True
+            output["DATA"] = []
+            for row in all_rows:
+                row_dict = dict()
+                row_dict["fileId"] = row.fileId
+                output["DATA"].append(row_dict)
+        else:
+            output["data_status"] = False
+        return output
+
+    def insert_file(self, user_id, filename, path, setname, separate, first, createtime):
+        Datafileall.objects.create(userId=user_id, filename=filename, path=path, setname=setname, separate=separate, first=first, createtime=createtime)
+
+
 class Dataset(models.Model):
-    userid = models.IntegerField(db_column='userId')  # Field name made lowercase.
-    datasetname = models.CharField(db_column='datasetName', max_length=20)  # Field name made lowercase.
+    userId = models.IntegerField(db_column='userId')  # Field name made lowercase.
+    datasetName = models.CharField(db_column='datasetName', max_length=20)  # Field name made lowercase.
     datatype = models.CharField(db_column='dataType', max_length=20)  # Field name made lowercase.
     datapath = models.CharField(db_column='dataPath', max_length=100)  # Field name made lowercase.
     createtime = models.CharField(db_column='createTime', max_length=20, blank=True, null=True)  # Field name made lowercase.
@@ -151,6 +187,37 @@ class Dataset(models.Model):
     class Meta:
         managed = False
         db_table = 'dataset'
+
+    def query_set_name(self, user_id, set_name):
+        print(user_id, set_name)
+        query = Dataset.objects.filter(datasetName='c')
+        if len(query) > 0:
+            return True
+        else:
+            return False
+
+    # def insert_set(self, user_id, set_name, type, path, createOn):
+
+
+class Datasetall(models.Model):
+    userId = models.IntegerField(db_column='userId',primary_key=True)  # Field name made lowercase.
+    setname = models.CharField(db_column='setname', max_length=100)  # Field name made lowercase.
+    path = models.CharField(db_column='path', max_length=100)  # Field name made lowercase.
+    createtime = models.CharField(db_column='createtime', max_length=100)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'datasetall'
+
+    def query_set_name(self, user_id, set_name):
+        query = Datasetall.objects.filter(userId=user_id, setname=set_name)
+        if len(query) > 0:
+            return True
+        else:
+            return False
+
+    def insert_set(self, user_id, set_name, path, create):
+        Datasetall.objects.create(userId=user_id, setname=set_name, path=path, createtime=create)
 
 
 class DjangoAdminLog(models.Model):
@@ -315,10 +382,15 @@ class Result(models.Model):
 
 
 class User(models.Model):
-    userid = models.AutoField(db_column='userId', primary_key=True)  # Field name made lowercase.
+    userId = models.AutoField(db_column='userId', primary_key=True)  # Field name made lowercase.
     username = models.CharField(db_column='userName', unique=True, max_length=20)  # Field name made lowercase.
     password = models.CharField(max_length=20)
 
     class Meta:
         managed = False
         db_table = 'user'
+
+    def find_user(self):
+        all = Result.objects.filter(userId=4)
+        print(len(all))
+        return all

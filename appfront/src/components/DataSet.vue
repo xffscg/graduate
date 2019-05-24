@@ -42,7 +42,7 @@
               </el-form>
               <span slot="footer" class="dialog-footer">
 									<el-button @click="dialogVisible2 = false">取 消</el-button>
-									<el-button id="submit1" type="primary" @click="submitfileinfor">确 定</el-button>
+									<el-button id="submit1" type="primary" @click="submitFileInfor">确 定</el-button>
 								</span>
             </el-dialog>
           </div>
@@ -72,7 +72,8 @@
           firstLine:true,
           separate:''
         },
-        set_option:['xff','scg']
+        set_option:['xff','scg'],
+        userId: 4,
 
       }
     },
@@ -94,60 +95,47 @@
 				})
 				.catch(_ => {});
 			},
-      submitfileinfor: function(){
-        console.log('ssss');
-				// var obj ={}
-				// obj.fileAddr = $('#fileload').val();
-				// obj.filename = $('#fileload').attr('name');
-				// obj.fileID = $('#fileload').attr('id');
-				// if(obj.fileAddr == "" || obj.fileAddr == null){
-				// 	alert('请选择文件')
-				// }
-				// console.log(obj)
-				// console.log(this.fileForm)
-				// var FL= '';
-				// if(this.fileForm.firstLine == true){
-				// 	FL = '1';
-				// }else{
-				// 	FL = '0';
-				// }
-        //
-				// if(this.fileForm.name == ''  || this.fileForm.separate == ''){
-				// 	alert('文件名称或者分隔符不能为空');
-				// }else{
-				// 	var formData = new FormData();
-				// 	formData.append('file',$('#fileload')[0].files[0]);
-				// 	formData.append('name',this.fileForm.name);
-				// 	formData.append('firstLine',FL);
-				// 	formData.append('separate',this.fileForm.separate);
-				// 	console.log(formData);
-				// 	console.log($('#fileload')[0].files[0]);
-				// 	var that = this;
-				// 	$.ajax({
-				// 		url:BASE_URL +'api/uploadDataFile',
-				// 		type:'POST',
-				// 		data:formData,
-				// 		cache:false,
-				// 		processData:false,
-				// 		contentType:false
-				// 	})
-        //
-				// 	.done(function(data){
-				// 		alert(0);
-				// 		var regx=/(\{.*})/;
-				// 		var data = data.match(regx)[0];
-				// 		data = JSON.parse(data);
-				// 		console.log(data);
-				// 		that.dialogVisible2 = false;
-				// 		this.getlist();
-        //
-				// 	})
-				// 	.fail(function(res){console.log(res);});
-				// 	this.$nextTick(() => {
-				// 		this.getlist();
-				// 		this.dialogVisible2 =false;
-				// 	})
-				// }
+      submitFileInfor: function(){
+				var obj ={}
+				obj.fileAddr = $('#fileload').val();
+				obj.filename = $('#fileload').attr('name');
+				obj.fileID = $('#fileload').attr('id');
+				if(obj.fileAddr == "" || obj.fileAddr == null){
+					alert('请选择文件')
+				}
+				var FL= '';
+				if(this.fileInfo.firstLine == true){
+					FL = '1';
+				}else{
+					FL = '0';
+				}
+				if(this.fileInfo.name == ''  || this.fileInfo.separate == ''){
+					alert('文件名称或者分隔符不能为空');
+				}else{
+					var formData = new FormData();
+					formData.append('file',$('#fileload')[0].files[0]);
+					formData.append('name',this.fileInfo.name);
+					formData.append('firstLine',FL);
+					formData.append('separate',this.fileInfo.separate);
+					formData.append('userId',this.userId);
+					console.log(formData.get('file'));
+					var that = this;
+					$.ajax({
+						url:BASE_URL +'uploadDataFile',
+						type:'POST',
+						data:formData,
+						processData:false,
+						contentType:false
+					})
+
+					.done(function(data){
+						that.dialogVisible2 = false;
+					})
+					.fail(function(res){console.log(res);});
+					this.$nextTick(() => {
+						this.dialogVisible2 =false;
+					})
+				}
 			},
 
       demo(){

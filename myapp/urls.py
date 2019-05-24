@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'get_file_list$', myapp.views.data_filelist, ),
     url(r'result_list$', myapp.views.result_list, ),
     url(r'model_list$', myapp.views.model_list, ),
+    url(r'uploadDataFile$', myapp.views.uploadDataFile, ),
 ]

@@ -17,17 +17,18 @@ def hello(request):
 
 
 def data_filelist(request):
-    # userName = 'hdp'
-    # password = 'test'
-    # userId = OutManager.OutputDataManager().authentication(userName, password)
-    # if userId == -1:
-    #     return jsonify({"status": "fail", "info": "用户验证失败"})
-    # userId = str(userId)
-    # dml = OutManager.OutputDataManager()
-    data_file = myapp.models.Datafile()
-    output = data_file.get_all_data_files_infolist()
-
-    return HttpResponse(json.dumps(output), content_type='application/json')
+    user_id = request.GET.get("userid")
+    set_file = myapp.models.Datasetall()
+    data_file = myapp.models.Datafileall()
+    set_list = set_file.get_all_set(user_id)
+    index = 1
+    for item in set_list['DATA']:
+        file_list = data_file.get_all_data_files_infolist(user_id, item['setname'])
+        item['file_list'] = file_list
+        item['indwx'] = index
+        index += 1
+        index += 1
+    return HttpResponse(json.dumps(set_list), content_type='application/json')
 
 
 def result_list(request):
@@ -47,7 +48,6 @@ def model_list(request):
 def uploadDataFile(request):
     path = r'D:\bupt\upload'
     set_name = request.POST.get('name')
-    print(set_name)
     firstLine = request.POST.get('firstLine')
     separate = request.POST.get('separate')
     user_id = request.POST.get('userId')
@@ -68,3 +68,4 @@ def uploadDataFile(request):
             destination.write(chunk)
 
     return HttpResponse(json.dumps({'status': "success"}), content_type='application/json')
+

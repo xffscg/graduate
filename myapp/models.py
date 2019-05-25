@@ -155,22 +155,15 @@ class Datafileall(models.Model):
         managed = False
         db_table = 'datafileall'
 
-    def get_all_data_files_infolist(self):
-        # self.cursor.execute(
-        #     """SELECT jobId, path,filename, createdon FROM datafile WHERE userid=%s AND isdeleted = 0""",
-        #     )
-        # all_rows = self.cursor.fetchall()
-        all_rows = Datafileall.objects.filter(userid=4)
-        output = dict()
+    def get_all_data_files_infolist(self, user_id, set_name):
+        all_rows = Datafileall.objects.filter(userId=user_id, setname=set_name)
+        output = []
         if all_rows is not None and len(all_rows) > 0:
-            output["data_status"] = True
-            output["DATA"] = []
             for row in all_rows:
                 row_dict = dict()
                 row_dict["fileId"] = row.fileId
-                output["DATA"].append(row_dict)
-        else:
-            output["data_status"] = False
+                row_dict["filename"] = row.filename
+                output.append(row_dict)
         return output
 
     def insert_file(self, user_id, filename, path, setname, separate, first, createtime):
@@ -187,16 +180,6 @@ class Dataset(models.Model):
     class Meta:
         managed = False
         db_table = 'dataset'
-
-    def query_set_name(self, user_id, set_name):
-        print(user_id, set_name)
-        query = Dataset.objects.filter(datasetName='c')
-        if len(query) > 0:
-            return True
-        else:
-            return False
-
-    # def insert_set(self, user_id, set_name, type, path, createOn):
 
 
 class Datasetall(models.Model):
@@ -218,6 +201,20 @@ class Datasetall(models.Model):
 
     def insert_set(self, user_id, set_name, path, create):
         Datasetall.objects.create(userId=user_id, setname=set_name, path=path, createtime=create)
+
+    def get_all_set(self, user_id):
+        all_rows_set = Datasetall.objects.filter(userId=user_id)
+        output_set = dict()
+        if all_rows_set is not None and len(all_rows_set) > 0:
+            output_set["data_status"] = True
+            output_set["DATA"] = []
+            for row in all_rows_set:
+                row_dict = dict()
+                row_dict["setname"] = row.setname
+                output_set["DATA"].append(row_dict)
+        else:
+            output_set["data_status"] = False
+        return output_set
 
 
 class DjangoAdminLog(models.Model):

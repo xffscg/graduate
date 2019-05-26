@@ -8,7 +8,8 @@
           </div>
           <div class="up_load_text">
             <el-button type="primary" plain @click="dialogVisible2 = true"><span class="glyphicon glyphicon-upload"></span>上传文件</el-button>
-            <el-dialog :visible.sync="dialogVisible2" title="上传文件">
+            <el-dialog :visible.sync="dialogVisible2" title="上传文件"
+            @close="handleClose"  >
               <el-form :model="fileInfo" label-width="140px">
                 <el-form-item label="数据集名称">
                   <el-select
@@ -51,38 +52,15 @@
           <el-menu
             default-active="2"
             class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose">
-            <el-submenu index="1">
+            @open="handleOpen">
+            <el-submenu v-for="item in dataList" :index="item.index">
               <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>导航一</span>
+                <span>{{item.setname}}</span>
               </template>
-              <el-menu-item-group>
-                <template slot="title">分组一</template>
-                <el-menu-item index="1-1">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
+              <el-menu-item-group v-for="file in item.file_list">
+                <template slot="title"><span>{{file.filename}}</span></template>
               </el-menu-item-group>
-              <el-menu-item-group title="分组2">
-                <el-menu-item index="1-3">选项3</el-menu-item>
-              </el-menu-item-group>
-              <el-submenu index="1-4">
-                <template slot="title">选项4</template>
-                <el-menu-item index="1-4-1">选项1</el-menu-item>
-              </el-submenu>
             </el-submenu>
-            <el-menu-item index="2">
-              <i class="el-icon-menu"></i>
-              <span slot="title">导航二</span>
-            </el-menu-item>
-            <el-menu-item index="3" disabled>
-              <i class="el-icon-document"></i>
-              <span slot="title">导航三</span>
-            </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-setting"></i>
-              <span slot="title">导航四</span>
-            </el-menu-item>
           </el-menu>
         </div>
       </div>
@@ -98,19 +76,14 @@
   export default {
     data(){
       return {
-        tabelData:[{
-          id: 8
-        }],
         dataList : [],
-        target: 7,
-        array:[[1, 2, 8, 9],[2, 4, 9, 12],[4, 7, 10, 13],[6, 8, 11, 15]],
         dialogVisible2:false,
         fileInfo:{
           name:'',
           firstLine:true,
           separate:''
         },
-        set_option:['xff','scg'],
+        set_option:[],
         userId: 4,
 
       }
@@ -130,7 +103,10 @@
           .then((response) => {
             console.log(response.body);
             this.dataList = response.body.DATA;
-            console.log(this.dataList);
+            var i;
+            for(i in this.dataList){
+              this.set_option.push(this.dataList[i].setname);
+            }
           }, (response) => {
 		        	console.log('请求失败了');
 		        	alert("请求list失败，请刷新重试哦");
@@ -185,47 +161,6 @@
 					})
 				}
 			},
-
-      demo(){
-        this.getList();
-        var num = this.target;
-        var old = this.array;
-        var res = this.find(num, old);
-        console.log(res);
-
-        
-      },
-
-      find(target, array){
-          // write code here
-          var m = array.length -1;
-          var n = array[0].length -1;
-          console.log(m);
-          console.log(n);
-          var res = false;
-          while((m >=0) && (n >=0)){
-              if(array[m][n] < target){
-                  res = false;
-                  break;
-              }else if(array[m][n] == target){
-                  res = true;
-                  break;
-              }else{
-                  if((array[m-1][n] == target) || (array[m][n-1] == target)){
-                      res = true;
-                      break;
-                  }else{
-                      if(array[m-1][n] > target){
-                          m = m -1;
-                      }
-                      if(array[m][n-1] > target){
-                          n = n -1;
-                      }
-                  }
-              }
-          }
-          return res;
-      },
     },
   };
 
@@ -264,7 +199,7 @@
   }
   .file_list{
     margin-top: 20px;
-    margin-left: 20px;
+    margin-left: 10px;
   }
   
 </style>

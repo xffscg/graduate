@@ -25,8 +25,7 @@ def data_filelist(request):
     for item in set_list['DATA']:
         file_list = data_file.get_all_data_files_infolist(user_id, item['setname'])
         item['file_list'] = file_list
-        item['indwx'] = index
-        index += 1
+        item['index'] = str(index)
         index += 1
     return HttpResponse(json.dumps(set_list), content_type='application/json')
 

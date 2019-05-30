@@ -68,3 +68,36 @@ def uploadDataFile(request):
 
     return HttpResponse(json.dumps({'status': "success"}), content_type='application/json')
 
+
+def get_all(request):
+    user_id = request.GET.get("userid")
+    output = dict()
+    output["data_status"] = True
+    output["DATA"] = dict()
+    set_file = myapp.models.Datasetall()
+    data_file = myapp.models.Datafileall()
+    set_list = set_file.get_all_set(user_id)
+    list1 = dict()
+    list1["datalist"] = []
+    list1["modellist"] = []
+    list1["alglist"] = []
+    index = 1
+    for item in set_list['DATA']:
+        file_list = data_file.get_all_data_files_infolist(user_id, item['setname'])
+        item['file_list'] = file_list
+        item['index'] = "1-" + str(index)
+        index += 1
+    list1["datalist"] = set_list['DATA']
+    model_file = myapp.models.Model()
+    output_model = model_file.get_model(user_id)
+    index = 1
+    for item in output_model['DATA']:
+        item['index'] = "2-" + str(index)
+        index += 1
+    list1["modellist"] = output_model['DATA']
+    output['DATA'] = list1
+    return HttpResponse(json.dumps(output), content_type='application/json')
+
+
+
+

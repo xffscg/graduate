@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="50ac1465-e4e8-493f-a4b6-81e91dfddd08" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appfront/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/appfront/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appfront/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/appfront/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/appfront/src/components/DataSet.vue" beforeDir="false" afterPath="$PROJECT_DIR$/appfront/src/components/DataSet.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appfront/src/components/Mining.vue" beforeDir="false" afterPath="$PROJECT_DIR$/appfront/src/components/Mining.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myapp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,11 +30,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/appfront/src/components/DataSet.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="106" column="36" selection-start-line="106" selection-start-column="36" selection-end-line="106" selection-end-column="36" />
+            <state relative-caret-position="342">
+              <caret line="59" column="14" selection-start-line="59" selection-start-column="14" selection-end-line="61" selection-end-column="29" />
               <folding>
                 <element signature="n#div#0;n#div#0;n#div#0;n#div#0;n#el-col#0;n#div#0;n#template#0;n#!!top" />
                 <element signature="n#div#1;n#div#0;n#div#0;n#div#0;n#el-col#0;n#div#0;n#template#0;n#!!top" />
@@ -81,11 +86,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/appfront/src/components/Mining.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+            <state relative-caret-position="627">
+              <caret line="33" column="48" lean-forward="true" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -93,8 +98,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/myapp/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3040">
-              <caret line="162" column="33" selection-start-line="162" selection-start-column="33" selection-end-line="162" selection-end-column="33" />
+            <state relative-caret-position="6308">
+              <caret line="334" column="35" selection-start-line="334" selection-start-column="26" selection-end-line="334" selection-end-column="35" />
               <folding>
                 <element signature="e#468#496#0" expanded="true" />
               </folding>
@@ -105,10 +110,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/myapp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
+            <state relative-caret-position="1368">
+              <caret line="98" column="41" selection-start-line="98" selection-start-column="41" selection-end-line="98" selection-end-column="41" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
+                <element signature="e#986#1197#0" />
+                <element signature="e#1470#2487#0" />
               </folding>
             </state>
           </provider>
@@ -117,8 +124,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/myapp/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="8" column="58" selection-start-line="8" selection-start-column="58" selection-end-line="8" selection-end-column="58" />
+            <state relative-caret-position="152">
+              <caret line="9" column="44" selection-start-line="9" selection-start-column="44" selection-end-line="9" selection-end-column="44" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -160,23 +167,24 @@
         <option value="$PROJECT_DIR$/manage.py" />
         <option value="$PROJECT_DIR$/appfront/src/App.vue" />
         <option value="$PROJECT_DIR$/appfront/src/router/index.js" />
-        <option value="$PROJECT_DIR$/appfront/src/components/Mining.vue" />
         <option value="$PROJECT_DIR$/machineL/urls.py" />
         <option value="$PROJECT_DIR$/appfront/src/components/ResultList.vue" />
         <option value="$PROJECT_DIR$/appfront/src/components/ModelList.vue" />
-        <option value="$PROJECT_DIR$/myapp/urls.py" />
         <option value="$PROJECT_DIR$/appfront/build/webpack.base.conf.js" />
         <option value="$PROJECT_DIR$/appfront/.eslintrc.js" />
         <option value="$PROJECT_DIR$/appfront/src/main.js" />
         <option value="$PROJECT_DIR$/machineL/settings.py" />
         <option value="$PROJECT_DIR$/myapp/models.py" />
+        <option value="$PROJECT_DIR$/myapp/urls.py" />
         <option value="$PROJECT_DIR$/myapp/views.py" />
         <option value="$PROJECT_DIR$/appfront/src/components/DataSet.vue" />
+        <option value="$PROJECT_DIR$/appfront/src/components/Mining.vue" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="785" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
     <option name="width" value="1085" />
     <option name="height" value="1040" />
   </component>
@@ -296,23 +304,28 @@
       <workItem from="1558299247154" duration="10553000" />
       <workItem from="1558672413596" duration="1702000" />
       <workItem from="1558728783630" duration="9694000" />
-      <workItem from="1558815124306" duration="4554000" />
+      <workItem from="1558815124306" duration="4619000" />
+      <workItem from="1558896911833" duration="4206000" />
+      <workItem from="1558994274788" duration="4014000" />
+      <workItem from="1559067098612" duration="2242000" />
+      <workItem from="1559143408002" duration="5344000" />
+      <workItem from="1559228829608" duration="908000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="83561000" />
+    <option name="totallyTimeSpent" value="100340000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11409396" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.077852346" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.26062322" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.12181303" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -434,6 +447,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/appfront/src/components/DataSet.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="59" column="14" selection-start-line="59" selection-start-column="14" selection-end-line="61" selection-end-column="29" />
+          <folding>
+            <element signature="n#div#0;n#div#0;n#div#0;n#div#0;n#el-col#0;n#div#0;n#template#0;n#!!top" />
+            <element signature="n#div#1;n#div#0;n#div#0;n#div#0;n#el-col#0;n#div#0;n#template#0;n#!!top" />
+            <element signature="n#style#0;n#el-switch#0;n#el-form-item#1;n#el-form#0;n#el-dialog#0;n#div#1;n#div#0;n#div#0;n#div#0;n#el-col#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/appfront/src/components/ResultList.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1083">
@@ -468,52 +493,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/appfront/src/components/Mining.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/myapp/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3040">
-          <caret line="162" column="33" selection-start-line="162" selection-start-column="33" selection-end-line="162" selection-end-column="33" />
+        <state relative-caret-position="6308">
+          <caret line="334" column="35" selection-start-line="334" selection-start-column="26" selection-end-line="334" selection-end-column="35" />
           <folding>
             <element signature="e#468#496#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/myapp/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1368">
+          <caret line="98" column="41" selection-start-line="98" selection-start-column="41" selection-end-line="98" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#986#1197#0" />
+            <element signature="e#1470#2487#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/myapp/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="8" column="58" selection-start-line="8" selection-start-column="58" selection-end-line="8" selection-end-column="58" />
+        <state relative-caret-position="152">
+          <caret line="9" column="44" selection-start-line="9" selection-start-column="44" selection-end-line="9" selection-end-column="44" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myapp/views.py">
+    <entry file="file://$PROJECT_DIR$/appfront/src/components/Mining.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/appfront/src/components/DataSet.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="106" column="36" selection-start-line="106" selection-start-column="36" selection-end-line="106" selection-end-column="36" />
-          <folding>
-            <element signature="n#div#0;n#div#0;n#div#0;n#div#0;n#el-col#0;n#div#0;n#template#0;n#!!top" />
-            <element signature="n#div#1;n#div#0;n#div#0;n#div#0;n#el-col#0;n#div#0;n#template#0;n#!!top" />
-            <element signature="n#style#0;n#el-switch#0;n#el-form-item#1;n#el-form#0;n#el-dialog#0;n#div#1;n#div#0;n#div#0;n#div#0;n#el-col#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="627">
+          <caret line="33" column="48" lean-forward="true" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
         </state>
       </provider>
     </entry>

@@ -53,13 +53,13 @@
             default-active="2"
             class="el-menu-vertical-demo"
             @open="handleOpen">
-            <el-submenu v-for="item in dataList" :index="item.index">
+            <el-submenu v-for="item in dataList" v-bind:key="item.setname" :index="item.index">
               <template slot="title">
                 <span>{{item.setname}}</span>
               </template>
-              <el-menu-item-group v-for="file in item.file_list">
+              <el-menu-item v-for="file in item.file_list" v-bind:key="file.fileId">
                 <template slot="title"><span>{{file.filename}}</span></template>
-              </el-menu-item-group>
+              </el-menu-item>
             </el-submenu>
           </el-menu>
         </div>
@@ -85,7 +85,6 @@
         },
         set_option:[],
         userId: 4,
-
       }
     },
     mounted() {
@@ -151,7 +150,6 @@
 						processData:false,
 						contentType:false
 					})
-
 					.done(function(data){
 						that.dialogVisible2 = false;
 					})
@@ -163,7 +161,6 @@
 			},
     },
   };
-
 </script>
 
 <style>
@@ -201,5 +198,5 @@
     margin-top: 20px;
     margin-left: 10px;
   }
-  
+
 </style>

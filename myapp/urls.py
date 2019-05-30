@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'result_list$', myapp.views.result_list, ),
     url(r'model_list$', myapp.views.model_list, ),
     url(r'uploadDataFile$', myapp.views.uploadDataFile, ),
+    url(r'get_all$', myapp.views.get_all, ),
 ]

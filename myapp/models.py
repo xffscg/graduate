@@ -118,11 +118,7 @@ class Datafile(models.Model):
         db_table = 'datafile'
 
     def get_all_data_files_infolist(self):
-        # self.cursor.execute(
-        #     """SELECT jobId, path,filename, createdon FROM datafile WHERE userid=%s AND isdeleted = 0""",
-        #     )
-        # all_rows = self.cursor.fetchall()
-        all_rows = Datafile.objects.filter(userid = 4)
+        all_rows = Datafile.objects.filter(userid=4)
         output = dict()
         if all_rows is not None and len(all_rows) > 0:
             output["data_status"] = True
@@ -161,8 +157,10 @@ class Datafileall(models.Model):
         if all_rows is not None and len(all_rows) > 0:
             for row in all_rows:
                 row_dict = dict()
-                row_dict["fileId"] = row.fileId
-                row_dict["filename"] = row.filename
+                row_dict["id"] = row.fileId
+                row_dict["fileName"] = row.filename
+                row_dict["type"] = 'data'
+
                 output.append(row_dict)
         return output
 

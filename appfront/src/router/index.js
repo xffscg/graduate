@@ -5,6 +5,7 @@ import DataSet from '@/components/DataSet'
 import Mining from '@/components/Mining'
 import ResultList from '@/components/ResultList'
 import ModelList from '@/components/ModelList'
+import item from '@/components/item'
 
 Vue.use(Router)
 

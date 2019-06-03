@@ -57,8 +57,8 @@
               <template slot="title">
                 <span>{{item.setname}}</span>
               </template>
-              <el-menu-item v-for="file in item.file_list" v-bind:key="file.fileId">
-                <template slot="title"><span>{{file.filename}}</span></template>
+              <el-menu-item v-for="file in item.subFile" v-bind:key="file.id">
+                <template slot="title"><span>{{file.fileName}}</span></template>
               </el-menu-item>
             </el-submenu>
           </el-menu>

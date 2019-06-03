@@ -24,7 +24,7 @@ def data_filelist(request):
     index = 1
     for item in set_list['DATA']:
         file_list = data_file.get_all_data_files_infolist(user_id, item['setname'])
-        item['file_list'] = file_list
+        item['subFile'] = file_list
         item['index'] = str(index)
         index += 1
     return HttpResponse(json.dumps(set_list), content_type='application/json')
@@ -81,10 +81,62 @@ def get_all(request):
     list1["datalist"] = []
     list1["modellist"] = []
     list1["alglist"] = []
+    list1["alglist"] = [{
+        "Name": "关联",
+        "index": "2-1",
+        "subFile": [{
+            "id": 1,
+            "type": "alg",
+            "fileName": "Cor协相关算法"
+        }, {
+            "id": 2,
+            "type": "alg",
+            "fileName": "Apriori"
+        }]
+    }, {
+        "Name": "分类",
+        "index": "2-2",
+        "subFile": [{
+            "id": 3,
+            "type": "alg",
+            "fileName": "决策树分类"
+        }, {
+            "id": 4,
+            "type": "alg",
+            "fileName": "支持向量机"
+        }, {
+            "id": 5,
+            "type": "alg",
+            "fileName": "朴素贝叶斯"
+        }, {
+            "id": 6,
+            "type": "alg",
+            "fileName": "PU分类"
+        }]
+    }, {
+        "Name": "回归",
+        "index": "2-3",
+        "subFile": [{
+            "id": 7,
+            "type": "alg",
+            "fileName": "逻辑回归"
+        }, {
+            "id": 8,
+            "type": "alg",
+            "fileName": "迭代回归"
+        }, {
+            "id": 9,
+            "type": "alg",
+            "fileName": "线性回归"
+        }, {
+            "id": 10,
+            "type": "alg",
+            "fileName": "岭回归"
+        }]}]
     index = 1
     for item in set_list['DATA']:
         file_list = data_file.get_all_data_files_infolist(user_id, item['setname'])
-        item['file_list'] = file_list
+        item['subFile'] = file_list
         item['index'] = "1-" + str(index)
         index += 1
     list1["datalist"] = set_list['DATA']
@@ -92,7 +144,8 @@ def get_all(request):
     output_model = model_file.get_model(user_id)
     index = 1
     for item in output_model['DATA']:
-        item['index'] = "2-" + str(index)
+        item['index'] = "3-" + str(index)
+        item['dtype'] = 'model'
         index += 1
     list1["modellist"] = output_model['DATA']
     output['DATA'] = list1

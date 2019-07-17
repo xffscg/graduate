@@ -17,7 +17,6 @@
                     placeholder="请选择数据集">
                     <el-option
                       v-for="item in set_option"
-                      :key="item"
                       :label="item"
                       :value="item">
                     </el-option>
@@ -37,7 +36,17 @@
 										<el-input v-model="fileInfo.separate"></el-input>
 									</el-form-item>
                 <el-form-item label="选择文件">
-										<input type="file" name="myfiles" id="fileload" multiple>
+										<input type="file" name="myfiles" id="fileload">
+									</el-form-item >
+                <el-form-item label="文件类型">
+										<el-select v-model="fileInfo.fileType" placeholder="请选择">
+                    <el-option
+                      v-for="item in fileOptions"
+                      :key="item"
+                      :label="item"
+                      :value="item">
+                    </el-option>
+                  </el-select>
 									</el-form-item >
               </el-form>
               <span slot="footer" class="dialog-footer">
@@ -49,19 +58,19 @@
         </div>
         <div class="file_list">
           <h5>文件列表</h5>
-          <el-menu
-            default-active="2"
-            class="el-menu-vertical-demo"
-            @open="handleOpen">
-            <el-submenu v-for="item in dataList" v-bind:key="item.setname" :index="item.index">
-              <template slot="title">
-                <span>{{item.setname}}</span>
-              </template>
-              <el-menu-item v-for="file in item.subFile" v-bind:key="file.id">
-                <template slot="title"><span>{{file.fileName}}</span></template>
-              </el-menu-item>
-            </el-submenu>
-          </el-menu>
+          <!--<el-menu-->
+            <!--default-active="2"-->
+            <!--class="el-menu-vertical-demo"-->
+            <!--@open="handleOpen">-->
+            <!--<el-submenu v-for="item in dataList" v-bind:key="item.setname" :index="item.index">-->
+              <!--<template slot="title">-->
+                <!--<span>{{item.setname}}</span>-->
+              <!--</template>-->
+              <!--<el-menu-item v-for="file in item.subFile" v-bind:key="file.id">-->
+                <!--<template slot="title"><span>{{file.fileName}}</span></template>-->
+              <!--</el-menu-item>-->
+            <!--</el-submenu>-->
+          <!--</el-menu>-->
         </div>
       </div>
     </div></el-col>
@@ -81,9 +90,11 @@
         fileInfo:{
           name:'',
           firstLine:true,
-          separate:''
+          separate:'',
+          fileType:'',
         },
         set_option:[],
+        fileOptions:['csv', 'txt'],
         userId: 4,
       }
     },
@@ -132,11 +143,12 @@
 				}else{
 					FL = '0';
 				}
-				if(this.fileInfo.name == ''  || this.fileInfo.separate == ''){
-					alert('文件名称或者分隔符不能为空');
+				if(this.fileInfo.name == ''  || this.fileInfo.separate == '' || this.fileInfo.fileType == ''){
+					alert('文件名称、分隔符或者文件类型不能为空');
 				}else{
 					var formData = new FormData();
 					formData.append('file',$('#fileload')[0].files[0]);
+					console.log($('#fileload')[0]);
 					formData.append('name',this.fileInfo.name);
 					formData.append('firstLine',FL);
 					formData.append('separate',this.fileInfo.separate);
@@ -152,6 +164,7 @@
 					})
 					.done(function(data){
 						that.dialogVisible2 = false;
+						that.getList();
 					})
 					.fail(function(res){console.log(res);});
 					this.$nextTick(() => {

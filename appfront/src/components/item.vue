@@ -10,7 +10,6 @@
         props: ["childMsg"],
         computed: {
           className: function() {
-            console.log(this.childMsg);
             if (this.childMsg === "data") {
               return "process-data";
             } else if (this.childMsg === "alg") {
@@ -22,7 +21,7 @@
             }
           }
         }
-    }
+    };
 </script>
 
 <style scoped>

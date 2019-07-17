@@ -14,7 +14,7 @@
               <template slot="title"><span>{{item.setname}}</span></template>
               <draggable  v-model="item.subFile" v-bind="{group:{name:'people', pull:'clone', put:false }}" @start="isDragging=true" @end="isDragging=false">
                 <li class="list-group-item" v-for="file in item.subFile" :key="item.id">
-                  <div>
+                  <div class="eachlist data">
                     <span>{{file.fileName}}</span>
                   </div>
                 </li>
@@ -29,7 +29,7 @@
               <template slot="title"><span>{{item.Name}}</span></template>
               <draggable  v-model="item.subFile" v-bind="{group:{name:'people', pull:'clone', put:false }}" @start="isDragging=true" @end="isDragging=false">
                 <li class="list-group-item" v-for="file in item.subFile" :key="item.id">
-                  <div>
+                  <div class="eachlist alg">
                     <span>{{file.fileName}}</span>
                   </div>
                 </li>
@@ -54,9 +54,12 @@
     <el-col :span="12"><div class="grid-content">
       <span>WorkSpace</span>
       <div class="work">
-        <draggable v-model="lists" v-bind="{group:{name:'people'}}" class="list-group">
-          <transition-group name="no">
-            <item v-for="ele in lists" :key="ele.id" :childMsg="ele.type" >
+        <draggable v-model="delList" v-bind="{group:{name:'people'}}" class="deleteSpace">
+          <i class="el-icon-delete" style="font-size: 30px; vertical-align: middle;"></i>
+        </draggable>
+        <draggable v-model="lists" v-bind="{group:{name:'people'}}" class="list-group" @end="end">
+          <transition-group name="no" tag="ul">
+            <item v-for="ele in lists" :key="ele.id" :childMsg="ele.type" :id="ele.type+ele.id" >
               {{ele.fileName}}
             </item>
           </transition-group>
@@ -86,7 +89,8 @@
         lists:[],
         listpro:[],
         isDragging: false,
-        delayedDragging: false
+        delayedDragging: false,
+        delList : []
       }
     },
     mounted() {
@@ -99,6 +103,9 @@
       handleClose(key, keyPath) {
         console.log(key, keyPath);
       },
+      end(evt){
+        console.log(evt.to);
+      },
       getList(){
         this.$http.get(BASE_URL + 'get_all?userid='+this.userId)
           .then((response) => {
@@ -110,6 +117,13 @@
 		        	alert("请求list失败，请刷新重试哦");
 		        });
       },
+      addClick(){
+        var idName = $("#" + this.listpro[this.listpro.length-1].type + this.listpro[this.listpro.length-1].id);
+        idName.click(function () {
+          getConfig();
+        });
+        console.log(idName);
+      }
     },
     watch: {
 			isDragging(newValue) {
@@ -121,12 +135,18 @@
 				}
 				this.$nextTick(() => {
 					this.delayedDragging = false;
-					// debugger;
 				});
 			},
       lists: {
 				handler(curVal, oldVal) {
 					console.log(this.lists);
+					if(this.lists.length == 1){
+					  this.listpro[0] = this.lists[0];
+					  this.$nextTick(() => {
+							this.addClick();
+							// this.showdetail=true;
+						});
+          }
 				}
 			},
 		}
@@ -153,8 +173,33 @@
   }
   .list-group {
     min-height: 60px;
+    width: 90%;
   }
   .list-group-item {
     cursor: move;
+  }
+  .eachlist{
+    height:30px;
+    border:1px solid#ddd;
+    margin-top:10px;
+    text-align: center;
+    color:black;
+    border-radius: 5%;
+  }
+  .eachlist.data {
+    background-color:#5ac594;
+  }
+  .eachlist.alg {
+    background-color:#81b5d4;
+  }
+  .itemfont {
+    height: 50px;
+    width: 90%;
+  }
+  .deleteSpace {
+    height: 80px;
+    width: 100%;
+    border-bottom: #4f4f4f 2px solid;
+    text-align: center;
   }
 </style>

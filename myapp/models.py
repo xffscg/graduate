@@ -375,7 +375,6 @@ class Result(models.Model):
         return output_result
 
 
-
 class User(models.Model):
     userId = models.AutoField(db_column='userId', primary_key=True)  # Field name made lowercase.
     username = models.CharField(db_column='userName', unique=True, max_length=20)  # Field name made lowercase.
@@ -389,3 +388,27 @@ class User(models.Model):
         all = Result.objects.filter(userId=4)
         print(len(all))
         return all
+
+    def register_user(self, username, password):
+        check_result = User.objects.filter(username=username)
+        output_register = dict()
+        if check_result is not None and len(check_result) > 0:
+            output_register["status"] = "fail"
+            output_register["error"] = "用户名已存在"
+        else:
+            User.objects.create(username=username, password=password)
+            output_register["status"] = "success"
+        return output_register
+
+    def login_user(self, username, password):
+        check_result = User.objects.filter(username=username, password=password)
+        output_login = dict()
+        if check_result is not None and len(check_result) > 0:
+            output_login["status"] = "success"
+            print(check_result[0])
+            output_login["userId"] = check_result[0].userId
+        else:
+            output_login["status"] = "fail"
+            output_login["error"] = "用户名与密码不匹配"
+        return output_login
+

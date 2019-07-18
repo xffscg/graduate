@@ -16,6 +16,22 @@ def hello(request):
     return HttpResponse(html)
 
 
+def userRegister(request):
+    user_name = request.GET.get("username")
+    password = request.GET.get("password")
+    user_set = myapp.models.User()
+    register_result = user_set.register_user(user_name, password)
+    return HttpResponse(json.dumps(register_result), content_type='application/json')
+
+
+def userLogin(request):
+    user_name = request.GET.get("username")
+    password = request.GET.get("password")
+    user_set = myapp.models.User()
+    login_result = user_set.login_user(user_name, password)
+    return HttpResponse(json.dumps(login_result), content_type='application/json')
+
+
 def data_filelist(request):
     user_id = request.GET.get("userid")
     set_file = myapp.models.Datasetall()

@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'model_list$', myapp.views.model_list, ),
     url(r'uploadDataFile$', myapp.views.uploadDataFile, ),
     url(r'get_all$', myapp.views.get_all, ),
+    url(r'user_register$', myapp.views.userRegister, ),
+    url(r'user_login$', myapp.views.userLogin, ),
 ]

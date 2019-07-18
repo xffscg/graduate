@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import home from '@/components/home'
 import DataMining from '@/components/DataMining'
 import DataSet from '@/components/DataSet'
 import Mining from '@/components/Mining'
 import ResultList from '@/components/ResultList'
 import ModelList from '@/components/ModelList'
-import item from '@/components/item'
 
 Vue.use(Router)
 
@@ -13,6 +13,11 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name : 'home',
+      component: home
+    },
+    {
+      path: '/DataMining',
       name: 'DataMining',
       component: DataMining,
       children:[
@@ -26,17 +31,17 @@ export default new Router({
         	component: DataSet,
         },
         {
-        	path: 'Mining',
+        	path: '/Mining',
         	name: 'Mining',
         	component: Mining,
         },
         {
-        	path: 'ResultList',
+        	path: '/ResultList',
         	name: 'ResultList',
         	component: ResultList,
         },
         {
-        	path: 'ModelList',
+        	path: '/ModelList',
         	name: 'ModelList',
         	component: ModelList,
         },

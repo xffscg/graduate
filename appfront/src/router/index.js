@@ -31,17 +31,17 @@ export default new Router({
         	component: DataSet,
         },
         {
-        	path: '/Mining',
+        	path: 'Mining',
         	name: 'Mining',
         	component: Mining,
         },
         {
-        	path: '/ResultList',
+        	path: 'ResultList',
         	name: 'ResultList',
         	component: ResultList,
         },
         {
-        	path: '/ModelList',
+        	path: 'ModelList',
         	name: 'ModelList',
         	component: ModelList,
         },

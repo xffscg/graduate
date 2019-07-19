@@ -9,10 +9,10 @@
       </div>
     </div>
   	<div class="menuList">
-  		<div class="item"><router-link to="/DataSet">Data Set</router-link></div>
-  		<div class="item"><router-link to="/Mining">Data Mining</router-link></div>
-  		<div class="item"><router-link to="/ModelList">Model List</router-link></div>
-  		<div class="item"><router-link to="/ResultList">Result List</router-link></div>
+  		<router-link :class="$route.path == '/DataMining/DataSet'?'active':'item'" to="/DataMining/DataSet">Data Set</router-link>
+  		<router-link :class="$route.path == '/DataMining/Mining'?'active':'item'" to="/DataMining/Mining">Data Mining</router-link>
+  		<router-link :class="$route.path == '/DataMining/ModelList'?'active':'item'" to="/DataMining/ModelList">Model List</router-link>
+  		<router-link :class="$route.path == '/DataMining/ResultList'?'active':'item'" to="/DataMining/ResultList">Result List</router-link>
   	</div>
     <div class="app-content">
       <keep-alive>
@@ -32,6 +32,13 @@
       }
     },
     created(){
+      let session = window.sessionStorage;
+      if(!session.getItem("userId")){
+        alert("请先登陆！");
+        this.$router.push({path:'/'});
+      }else{
+        this.userId = session.getItem("userId");
+      }
 
     },
     mounted() {
@@ -40,7 +47,7 @@
       logout(){
         let session = window.sessionStorage;
         session.removeItem('userId');
-        // this.$router.push({path:'/'});
+        this.$router.push({path:'/'});
       }
     },
     watch: {
@@ -67,6 +74,8 @@
   }
   .logout {
     float: right;
+    margin: 15px;
+    font-size: 20px;
   }
   .logoutS:hover {
     color: #bbccdd;
@@ -77,6 +86,8 @@
     color: #00FA9A;
   }
   .menuList {
+    display: flex;
+    justify-content: flex-start;
   	height: 40px;
   	width: 100%;
   	background: #DEF3F9;
@@ -85,12 +96,20 @@
   }
   .item {
     font-size: 20px;
-  	float: left;
-  	height: 35px;
+  	height: 40px;
   	width: 25%;
   	padding-top: 10px;
   	text-align: center;
     vertical-align: middle;
+  }
+  .active {
+    font-size: 20px;
+  	height: 40px;
+  	width: 25%;
+  	padding-top: 10px;
+  	text-align: center;
+    vertical-align: middle;
+    background: #9FF0E2;
   }
   a{
   	text-decoration: none;

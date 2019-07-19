@@ -1,82 +1,14 @@
 <template>  
   <div class="container">
-  	<el-col :span="6"><div class="grid-content">
-      <div class ="file">
-        <div class="upload">
-          <div class="icon_up">
-            <i class="el-icon-folder-add"></i>
-          </div>
-          <div class="up_load_text">
-            <el-button type="primary" plain @click="dialogVisible2 = true"><span class="glyphicon glyphicon-upload"></span>上传文件</el-button>
-            <el-dialog :visible.sync="dialogVisible2" title="上传文件"
-            @close="handleClose"  >
-              <el-form :model="fileInfo" label-width="140px">
-                <el-form-item label="数据集名称">
-                  <el-select
-                    v-model="fileInfo.name" filterable  allow-create  default-first-option
-                    placeholder="请选择数据集">
-                    <el-option
-                      v-for="item in set_option"
-                      :label="item"
-                      :value="item">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="第一行有效">
-                  <el-switch
-										  style="display: inline;"
-										  v-model="fileInfo.firstLine"
-										  active-color="#13ce66"
-										  inactive-color="#ff4949"
-										  active-text="有列头（无效）"
-										  inactive-text="无列头（有效）">
-										</el-switch>
-                </el-form-item>
-                <el-form-item label="分隔符">
-										<el-input v-model="fileInfo.separate"></el-input>
-									</el-form-item>
-                <el-form-item label="选择文件">
-										<input type="file" name="myfiles" id="fileload">
-									</el-form-item >
-                <el-form-item label="文件类型">
-										<el-select v-model="fileInfo.fileType" placeholder="请选择">
-                    <el-option
-                      v-for="item in fileOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item">
-                    </el-option>
-                  </el-select>
-									</el-form-item >
-              </el-form>
-              <span slot="footer" class="dialog-footer">
-									<el-button @click="dialogVisible2 = false">取 消</el-button>
-									<el-button id="submit1" type="primary" @click="submitFileInfor">确 定</el-button>
-								</span>
-            </el-dialog>
-          </div>
-        </div>
-        <div class="file_list">
-          <h5>文件列表</h5>
-          <!--<el-menu-->
-            <!--default-active="2"-->
-            <!--class="el-menu-vertical-demo"-->
-            <!--@open="handleOpen">-->
-            <!--<el-submenu v-for="item in dataList" v-bind:key="item.setname" :index="item.index">-->
-              <!--<template slot="title">-->
-                <!--<span>{{item.setname}}</span>-->
-              <!--</template>-->
-              <!--<el-menu-item v-for="file in item.subFile" v-bind:key="file.id">-->
-                <!--<template slot="title"><span>{{file.fileName}}</span></template>-->
-              <!--</el-menu-item>-->
-            <!--</el-submenu>-->
-          <!--</el-menu>-->
-        </div>
+    <div class="left">
+      <div class="upload">
+        <i class="el-icon-folder-add"></i>
+        <span>&nbsp;&nbsp;&nbsp;上传文件</span>
       </div>
-    </div></el-col>
-    <el-col :span="18"><div class="grid-content">
-      <p>xxxxxx</p>
-    </div></el-col>
+      <div class="file_list"></div>
+    </div>
+    <div class="right">yyy</div>
+    <div class="center">rr</div>
   </div>
 </template>
 
@@ -182,30 +114,41 @@
     margin-left: 1%;
     margin-right: 1%;
     width: 97%;
-    height: 100%;
+    height: 700px;
     background: #FFFAFA;
   }
-  .file {
-    width: 98%;
+  .left {
+    float: left;
+    width: 25%;
     height: 100%;
-    padding-top: 10px;
-    text-align: center;
-    font-size: 18px;
+    border-right: #DBDBDB solid 1px;
+  }
+  .center {
+    margin-left: 22%;
+    margin-right: 22%;
+    height: 100%;
+  }
+  .right {
+    float: right;
+    width: 25%;
+    height: 100%;
+    border-left: #DBDBDB solid 1px;
   }
   .upload {
-    width: 98%;
+    padding: 6px 6px;
+    width: 50%;
     height: 50px;
-    margin-top: 10px;
-    margin-left: 30px;
+    margin: 50px 15%;
+    font-size: 20px;
+    border: #c4dce8 1px solid;
+    border-radius: 5px;
+    vertical-align: middle;
+    background: #94D2F2;
+    line-height: 50px;
   }
-  .icon_up {
-    float: left;
-    font-size: 30px;
-    padding-top: 5px;
-  }
-  .up_load_text {
-    float: left;
-    margin-left: 20px;
+  .upload:hover{
+    background: #5897fb;
+    font-size: 120%;
   }
   .file_list{
     margin-top: 20px;

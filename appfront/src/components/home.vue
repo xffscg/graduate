@@ -7,7 +7,7 @@
       <span class="loginS" @click="showL"> 登陆</span>
     </div>
     <div v-if="showRegister" class="registerPart">
-      <div id="closeR" class="close" @click="close">x</div>
+      <div id="closeR" class="close" @click="close"><i class="el-icon-close"></i></div>
       <h1>注册</h1>
       <form v-model="registerInfo">
         <label for="userN">用户名:&nbsp&nbsp&nbsp&nbsp&nbsp</label>
@@ -18,8 +18,8 @@
         <input id="pwa" type="text" v-model="registerInfo.passwordAgain" placeholder="请确认密码" required></input><br>
         <p style="color: red" id="registerError"></p>
         <div style="display: inline; margin-left: 20px;">
-          <input type="submit" @click="goRegister"></input>
-          <input id="cancelR" type="button" value="取消" @click="close"></input>
+          <button class="submitButton" type="button" @click="goRegister">提交</button>
+          <button class="cancelButton" id="cancelR" type="button" @click="close">取消</button>
         </div>
       </form>
     </div>
@@ -33,8 +33,9 @@
         <input id="pwLogin" type="text" v-model="loginInfo.password" placeholder="请输入小于20为由数字、大写字母和小写字母组成的密码"></input><br>
         <p style="color: red" id="loginError"></p>
         <div style="display: inline; margin-left: 20px;">
-          <input type="submit" @click="goLogin"></input>
-          <input id="cancelL" type="button" value="取消" @click="close"></input>
+          <!--<input type="submit" @click="goLogin"></input>-->
+          <button class="submitButton" type="button" @click="goLogin">提交</button>
+          <button class="cancelButton" id="cancelL" type="button" @click="close">取消</button>
         </div>
       </form>
     </div>
@@ -117,18 +118,19 @@
           }else if(this.loginInfo.userName.length > 20 || this.loginInfo.password.length > 20){
             errorInfo.innerText = "用户名或密码不能超过20个字符";
           }else{
-            let that = this;
+            // let that = this;
             this.$http.get(BASE_URL + 'user_login?username='+this.loginInfo.userName+'&password='+this.loginInfo.password)
             .then((response) => {
               console.log(response);
               if(response.body.status == "success"){
-                that.userId = response.body.userId;
-                that.showLogin = false;
+                this.userId = response.body.userId;
+                this.showLogin = false;
                 $('#forPop').css("display", "none");
                 let session = window.sessionStorage;
                 session.setItem('userId',response.body.userId);
                 alert("登陆成功");
-                this.$router.push({path:'/DataMining'});
+                this.$router.push({path:"/DataMining"});
+
               }else{
                 errorInfo.innerText = response.body.error;
               }
@@ -142,7 +144,7 @@
     }
 </script>
 
-<style scoped>
+<style>
   input[type="text"]{
     width: 280px;
     height: 50px;
@@ -150,7 +152,7 @@
     border-radius: 7px;
     margin: 10px;
   }
-  input[type="submit"]{
+  .submitButton {
     background: #409EFF;
     width: 150px;
     height: 50px;
@@ -159,7 +161,7 @@
     margin: 10px;
     font-size: 15px;
   }
-  input[type="button"]{
+  .cancelButton {
     background: none;
     width: 150px;
     height: 50px;
@@ -170,11 +172,11 @@
   input[type="text"]:focus{
     border: #87CEFF 2px solid;
   }
-  input[type="submit"]:hover{
+  .submitButton:hover{
     background: #3875d7;
     font-size: 120%;
   }
-  input[type="button"]:hover{
+  .cancelButton:hover{
     font-size: 120%;
   }
   .home {

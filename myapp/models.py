@@ -212,6 +212,7 @@ class Datasetall(models.Model):
                 output_set["DATA"].append(row_dict)
         else:
             output_set["data_status"] = False
+        print(output_set)
         return output_set
 
 
@@ -302,6 +303,35 @@ class Job(models.Model):
     class Meta:
         managed = False
         db_table = 'job'
+
+
+class Joblist(models.Model):
+    jobId = models.AutoField(db_column='jobId', primary_key=True)  # Field name made lowercase.
+    userId = models.IntegerField(db_column='userId')  # Field name made lowercase.
+    jobName = models.CharField(db_column='jobName', max_length=255)  # Field name made lowercase.
+    jobStatus = models.IntegerField(db_column='jobStatus')
+    jobType = models.IntegerField(db_column='jobType')
+    dataId = models.IntegerField(db_column='dataId')
+    dataPara = models.CharField(db_column='dataPara', max_length=255)
+    funcId = models.IntegerField(db_column='funcId')
+    funcPara = models.CharField(db_column='funcPara', max_length=255)
+    result = models.TextField(db_column='result')
+
+    class Meta:
+        managed = False
+        db_table = 'joblist'
+
+    def insert_job(self, userId, jobName, jobType):
+        Joblist.objects.create(userId=userId, jobName=jobName, jobStatus=0, jobType=jobType)
+        job_all = Joblist.objects.all()
+        job_id = len(job_all)-1
+        new_job_res = dict()
+        new_job_res["status"] = True
+        new_job_res["jobId"] = job_id
+        return new_job_res
+        # Joblist.objects.create(userId=job_info.userId, jobName=job_info.jobName, jobStatus=job_info.jobStatus,
+        #                        jobType=job_info.jobType, dataId=job_info.dataId, dataPara=job_info.dataPara,
+        #                        funcId=job_info.funcId, funcPara=job_info.funcPara)
 
 
 class Model(models.Model):

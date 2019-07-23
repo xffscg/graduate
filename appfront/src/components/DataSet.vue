@@ -1,14 +1,74 @@
 <template>  
   <div class="container">
     <div class="left">
-      <div class="upload">
+      <div class="upload" @click="showUpload = true">
         <i class="el-icon-folder-add"></i>
         <span>&nbsp;&nbsp;&nbsp;上传文件</span>
       </div>
-      <div class="file_list"></div>
+      <div class="file_list">
+          <h3 style="padding-right: 20px;">文件列表</h3>
+          <el-menu
+            default-active="2"
+            class="el-menu-vertical-demo">
+            <el-submenu v-for="item in dataList" :index="item.index" :key="item.setname">
+              <template slot="title">
+                <span>{{item.setname}}</span>
+              </template>
+              <el-menu-item v-for="file in item.subFile" :key="file.id">
+                <template slot="title"><span>{{file.fileName}}</span></template>
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
+        </div>
     </div>
     <div class="right">yyy</div>
     <div class="center">rr</div>
+    <el-dialog :visible.sync="showUpload" title="上传文件"
+      @close="handleClose"  >
+        <el-form :model="fileInfo" label-width="140px">
+          <el-form-item label="数据集名称">
+            <el-select
+              v-model="fileInfo.name" filterable  allow-create  default-first-option
+              placeholder="请选择数据集">
+              <el-option
+                v-for="item in set_option"
+                :label="item"
+                :value="item" :key="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="第一行有效">
+            <el-switch
+                style="display: inline;"
+                v-model="fileInfo.firstLine"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="有列头（无效）"
+                inactive-text="无列头（有效）">
+              </el-switch>
+          </el-form-item>
+          <el-form-item label="分隔符">
+              <el-input v-model="fileInfo.separate"></el-input>
+            </el-form-item>
+          <el-form-item label="选择文件">
+              <input type="file" name="myfiles" id="fileload">
+            </el-form-item >
+          <el-form-item label="文件类型">
+              <el-select v-model="fileInfo.fileType" placeholder="请选择">
+              <el-option
+                v-for="item in fileOptions"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
+            </el-form-item >
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button id="submit1" type="primary" @click="submitFileInfor">确 定</el-button>
+            <el-button @click="showUpload = false">取 消</el-button>
+          </span>
+      </el-dialog>
   </div>
 </template>
 
@@ -18,28 +78,24 @@
     data(){
       return {
         dataList : [],
-        dialogVisible2:false,
+        showUpload:false,
         fileInfo:{
           name:'',
-          firstLine:true,
+          firstLine:0,
           separate:'',
           fileType:'',
         },
         set_option:[],
         fileOptions:['csv', 'txt'],
-        userId: 4,
+        userId: null,
       }
     },
     mounted() {
-         this.getList();
-      },
+        let session = window.sessionStorage;
+        this.userId =  session.getItem('userId');
+        this.getList();
+     },
     methods:{
-      handleOpen(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        console.log(key, keyPath);
-      },
       getList(){
         this.$http.get(BASE_URL + 'get_file_list?userid='+this.userId)
           .then((response) => {
@@ -95,7 +151,7 @@
 						contentType:false
 					})
 					.done(function(data){
-						that.dialogVisible2 = false;
+						that.showUpload = false;
 						that.getList();
 					})
 					.fail(function(res){console.log(res);});

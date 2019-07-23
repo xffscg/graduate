@@ -38,11 +38,12 @@ def data_filelist(request):
     data_file = myapp.models.Datafileall()
     set_list = set_file.get_all_set(user_id)
     index = 1
-    for item in set_list['DATA']:
-        file_list = data_file.get_all_data_files_infolist(user_id, item['setname'])
-        item['subFile'] = file_list
-        item['index'] = str(index)
-        index += 1
+    if set_list["data_status"]:
+        for item in set_list['DATA']:
+            file_list = data_file.get_all_data_files_infolist(user_id, item['setname'])
+            item['subFile'] = file_list
+            item['index'] = str(index)
+            index += 1
     return HttpResponse(json.dumps(set_list), content_type='application/json')
 
 
@@ -150,22 +151,34 @@ def get_all(request):
             "fileName": "岭回归"
         }]}]
     index = 1
-    for item in set_list['DATA']:
-        file_list = data_file.get_all_data_files_infolist(user_id, item['setname'])
-        item['subFile'] = file_list
-        item['index'] = "1-" + str(index)
-        index += 1
-    list1["datalist"] = set_list['DATA']
+    if set_list["data_status"]:
+        for item in set_list['DATA']:
+            file_list = data_file.get_all_data_files_infolist(user_id, item['setname'])
+            item['subFile'] = file_list
+            item['index'] = "1-" + str(index)
+            index += 1
+        list1["datalist"] = set_list['DATA']
     model_file = myapp.models.Model()
     output_model = model_file.get_model(user_id)
     index = 1
-    for item in output_model['DATA']:
-        item['index'] = "3-" + str(index)
-        item['dtype'] = 'model'
-        index += 1
-    list1["modellist"] = output_model['DATA']
+    if output_model["data_status"]:
+        for item in output_model['DATA']:
+            item['index'] = "3-" + str(index)
+            item['dtype'] = 'model'
+            index += 1
+        list1["modellist"] = output_model['DATA']
     output['DATA'] = list1
     return HttpResponse(json.dumps(output), content_type='application/json')
+
+
+def new_job(request):
+    userId = request.GET.get("userid")
+    jobName = request.GET.get("jobname")
+    jobType = request.GET.get("jobtype")
+    job = myapp.models.Joblist()
+    jobInfo = job.insert_job(userId, jobName, jobType)
+    return HttpResponse(json.dumps(jobInfo), content_type='application/json')
+
 
 
 

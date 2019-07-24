@@ -52,6 +52,13 @@
     </div>
     <div class="right1">
       <h3>配置区</h3>
+      <form v-model="detailInfo">
+        <div class="formItem" v-for="item in detailInfo">
+          <label>{{item.name}}</label>
+          <input type="text" v-model="item.value"></input>
+        </div>
+      </form>
+      <button class="submitButton" type="button" @click="submitConfig">保存</button>
     </div>
     <div class="center1">
       <div class="newJob" @click="showCreate = true">
@@ -59,25 +66,25 @@
         <span>&nbsp;&nbsp;&nbsp;新建任务</span>
       </div>
       <h3>工作区</h3>
-      <div class="work">
+      <div class="work" id="workPart">
         <div style="height: 100px; width: 90%; margin: 5% 5%">
           <div class="tagEach data">数据</div>
-          <draggable v-model="jobList.data" v-bind="{group:{name:'data'}}" class="listBox">
+          <draggable v-model="jobList.data" v-bind="{group:{name:'data'},disabled:dataDis}" class="listBox">
             <transition-group>
               <li class="list-group" v-for="ele in jobList.data" :key="ele.id">
-                <div class="groupEach data" id="dataBox" @click="getDetail">{{ele.fileName}}
+                <div class="groupEach data" id="dataBox" @click="getDetailClick">{{ele.fileName}}
                 </div>
               </li>
             </transition-group>
           </draggable>
           <div class="deleteSpace"><i class="el-icon-delete" style="font-size: 30px; color: #5897fb" id="delData" @click="deleteList"></i></div>
         </div>
-        <div style="height: 100px; width: 90%; margin: 5% 5%">
+        <div style="height: 100px; width: 90%; margin: 5% 5%; display: none" id="algPart">
           <div class="tagEach alg">算法</div>
-          <draggable v-model="jobList.alg" v-bind="{group:{name:'alg'}}" class="listBox">
+          <draggable v-model="jobList.alg" v-bind="{group:{name:'alg'},disabled:algDis}" class="listBox">
             <transition-group>
               <li class="list-group" v-for="ele in jobList.alg" :key="ele.id" :id="ele.type+ele.id">
-                <div class="groupEach alg" id="algBox" @click="getDetail">
+                <div class="groupEach alg" id="algBox" @click="getDetailClick">
                   <span>{{ele.fileName}}</span>
                 </div>
               </li>
@@ -85,12 +92,12 @@
           </draggable>
           <div class="deleteSpace"><i class="el-icon-delete" style="font-size: 30px; color: #5897fb" id="delAlg" @click="deleteList"></i></div>
         </div>
-        <div style="height: 100px; width: 90%; margin: 5% 5%">
+        <div style="height: 100px; width: 90%; margin: 5% 5%;display: none" id="modelPart">
           <div class="tagEach model">模型</div>
-          <draggable v-model="jobList.model" v-bind="{group:{name:'model'}}" class="listBox">
+          <draggable v-model="jobList.model" v-bind="{group:{name:'model'},disabled:modelDis}" class="listBox">
             <transition-group>
               <li class="list-group" v-for="ele in jobList.model" :key="ele.id" :id="ele.type+ele.id">
-                <div class="groupEach model" id="modelBox" @click="getDetail">
+                <div class="groupEach model" id="modelBox" @click="getDetailClick">
                   <span>{{ele.fileName}}</span>
                 </div>
               </li>
@@ -139,9 +146,19 @@
         jobInfo: {
           jobId : null,
           jobName : "",
-          jobType : 0,
+          jobType : 1,
+          userId : this.userId,
+          dataId : null,
+          dataPara : null,
+          funcId : null,
+          funcPara :null
         },
+        detailInfo : [],
+        dataDis : false,
+        algDis : false,
+        modelDis : false,
         showCreate : false,
+        showWork : false,
         isDragging: false,
         delayedDragging: false,
         jobList :{
@@ -155,8 +172,32 @@
       let session = window.sessionStorage;
       this.userId =  session.getItem('userId');
       this.getList();
-      },
+      if(session.getItem('jobId')){
+        this.jobInfo.jobId = session.getItem('jobId')
+        this.jobInfo.jobType = session.getItem('jobType')
+        $("#workPart").css("display", "block");
+        if(this.jobInfo.jobType == 1){
+          $("#algPart").css("display", "block");
+        }else{
+          $("#modelPart").css("display", "block");
+        }
+      }
+    },
     methods:{
+      deepCopy(oldVal){
+        let target = oldVal.constructor === Array?[]:{};
+        for(let key in oldVal){
+          if(oldVal.hasOwnProperty(key)){
+            if(oldVal[key] && typeof oldVal[key] === "object"){
+              target[key] = oldVal[key].constructor === Array?[]:{};
+              target[key] = this.deepCopy(oldVal[key]);
+            }else{
+              target[key] = oldVal[key];
+            }
+          }
+        }
+        return target;
+      },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
       },
@@ -177,19 +218,37 @@
 		        	alert("请求list失败，请刷新重试哦");
 		        });
       },
-      getDetail(ev, type){
-        if(type === undefined){
+      getDetailClick(){
           if($(event.target)[0].id == "dataBox"){
-            console.log("data");
+            console.log(this.jobInfo);
           }else if($(event.target)[0].id == "algBox"){
             console.log("alg");
           }else if($(event.target)[0].id == "modelBox"){
             console.log("model");
           }
-        }else{
-          console.log(type + "lll");
-        }
       },
+      getDetailFirst(type){
+          if(type == "data"){
+            this.getDataDetail();
+            console.log(this.jobInfo);
+          }else if(type == "alg"){
+            console.log("alg");
+          }else if(type == "model"){
+            console.log("model");
+          }
+      },
+      getDataDetail(){
+        this.$http.get(BASE_URL + 'data/get_data_detail?fileid='+this.jobInfo.dataId).then((response) => {
+          console.log(response.body);
+          this.jobInfo.dataPara = response.body.DATA;
+          this.detailInfo = this.deepCopy(response.body.DATA);
+          console.log(this.detailInfo);
+        }, (response) => {
+          console.log('请求失败了');
+          alert("获取数据信息失败，请刷新重试哦");
+        });
+      },
+      submitConfig(){},
       newJob(){
         if(this.jobInfo.jobName == ""){
           alert("任务名不能为空")
@@ -200,14 +259,21 @@
           }else{
             this.jobInfo.jobType = 0;
           }
-          this.$http.get(BASE_URL + 'new_job?userid='+this.userId + "&jobname=" + this.jobInfo.jobName
+          this.$http.get(BASE_URL + 'job/new_job?userid='+this.userId + "&jobname=" + this.jobInfo.jobName
           + "&jobtype=" + this.jobInfo.jobType)
             .then((response) => {
               console.log(response.body);
               this.jobInfo.jobId = response.body.jobId
               let session = window.sessionStorage;
-              session.setItem('jobId',response.body.jobId);
+              session.setItem('jobId',this.jobInfo.id);
+              session.setItem('jobType',this.jobInfo.jobType);
               this.showCreate = false;
+              $("#workPart").css("display", "block");
+              if(this.jobInfo.jobType == 1){
+                $("#algPart").css("display", "block");
+              }else{
+                $("#modelPart").css("display", "block");
+              }
             }, (response) => {
                 console.log('请求失败了');
                 alert("新建任务失败，请刷新重试哦");
@@ -215,14 +281,22 @@
         }
       },
       deleteList(){
-        var targetId = $(event.target)[0].id;
-        console.log(targetId);
+        let targetId = $(event.target)[0].id;
         if(targetId == 'delData'){
+          this.dataDis = false;
           this.jobList.data = [];
+          this.jobInfo.dataId = null;
+          this.jobInfo.dataPara = null;
         }else if(targetId == 'delAlg'){
+          this.algDis = false;
           this.jobList.alg = [];
+          this.jobInfo.funcId = null;
+          this.jobInfo.funcPara = null;
         }else if(targetId == 'delModel'){
+          this.modelDis = false;
           this.jobList.model = [];
+          this.jobInfo.funcId = null;
+          this.jobInfo.funcPara = null;
         }
       },
       goRun(){}
@@ -242,18 +316,22 @@
       "jobList.data":{
 			  handler(curVal, oldVal){
 			    if(curVal.length == 0 && oldVal.length == 1){
-			      console.log("iii")
+			      console.log("clear");
           }else if(curVal.length == 1 && oldVal.length == 0){
-			      this.getDetail(null, curVal[0].type);
+			      this.dataDis = true;
+			      this.jobInfo.dataId = curVal[0].id;
+			      this.getDetailFirst(curVal[0].type);
           }
         }
       },
       "jobList.alg":{
 			  handler(curVal, oldVal){
 			    if(curVal.length == 0 && oldVal.length == 1){
-			      console.log("iii")
+			      console.log("clear");
           }else if(curVal.length == 1 && oldVal.length == 0){
-			      this.getDetail(null, curVal[0].type);
+			      this.algDis = true;
+			      this.jobInfo.funcId = curVal[0].id;
+			      this.getDetailFirst(curVal[0].type);
           }
         }
       },
@@ -263,6 +341,16 @@
 </script>
 
 <style>
+  input[type="text"] {
+    width: 50%;
+    height: 30px;
+    right: 0;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+  input[type="text"]:focus{
+    border: #87CEFF 2px solid;
+  }
   .submitButton {
     background: #409EFF;
     width: 150px;
@@ -281,18 +369,18 @@
     margin-left: 1%;
     margin-right: 1%;
     width: 97%;
-    height: 700px;
+    height: 650px;
     background: #FFFAFA;
   }
   .left1 {
     float: left;
-    height: 100%;
+    height: 640px;
     width: 25%;
     border-right: #DBDBDB solid 1px;
   }
   .right1 {
     float: right;
-    height: 100%;
+    height: 640px;
     width: 30%;
     border-left: #DBDBDB solid 1px;
   }
@@ -322,6 +410,7 @@
     margin: 5% 5%;
     height: 500px;
     background-color: #F0FFF0;
+    display: none;
   }
   .list-group {
     height: 90px;
@@ -400,5 +489,12 @@
   }
   .groupEach.model {
     background-color:#ED9EB1;
+  }
+  .formItem {
+    height: 50px;
+    width: 90%;
+    font-size: 18px;
+    margin: 5% 5% 5% 5%;
+    border-bottom: #c4dce8 1px solid;
   }
 </style>

@@ -32,21 +32,6 @@ def userLogin(request):
     return HttpResponse(json.dumps(login_result), content_type='application/json')
 
 
-def data_filelist(request):
-    user_id = request.GET.get("userid")
-    set_file = myapp.models.Datasetall()
-    data_file = myapp.models.Datafileall()
-    set_list = set_file.get_all_set(user_id)
-    index = 1
-    if set_list["data_status"]:
-        for item in set_list['DATA']:
-            file_list = data_file.get_all_data_files_infolist(user_id, item['setname'])
-            item['subFile'] = file_list
-            item['index'] = str(index)
-            index += 1
-    return HttpResponse(json.dumps(set_list), content_type='application/json')
-
-
 def result_list(request):
     user_id = request.GET.get("userid")
     result_file = myapp.models.Result()
@@ -59,31 +44,6 @@ def model_list(request):
     model_file = myapp.models.Model()
     output_model = model_file.get_model(user_id)
     return HttpResponse(json.dumps(output_model), content_type='application/json')
-
-
-def uploadDataFile(request):
-    path = r'D:\bupt\upload'
-    set_name = request.POST.get('name')
-    firstLine = request.POST.get('firstLine')
-    separate = request.POST.get('separate')
-    user_id = request.POST.get('userId')
-    file = request.FILES.get('file')
-    current_path1 = path + "\\" + set_name
-    current_path = path + "\\" + set_name + '\\' + file.name
-    filename = file.name
-    create = strftime("%Y%m%d%H%M%S")
-    dataset_file = myapp.models.Datasetall()
-    datafile_file = myapp.models.Datafileall()
-    datafile_file.insert_file(user_id, filename, current_path, set_name, separate, firstLine, create)
-    if not dataset_file.query_set_name(user_id, set_name):
-        dataset_file.insert_set(user_id, set_name, current_path1, create)
-    if not os.path.exists(current_path1):
-        os.mkdir(current_path1)
-    with open(current_path, 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
-
-    return HttpResponse(json.dumps({'status': "success"}), content_type='application/json')
 
 
 def get_all(request):
@@ -171,13 +131,6 @@ def get_all(request):
     return HttpResponse(json.dumps(output), content_type='application/json')
 
 
-def new_job(request):
-    userId = request.GET.get("userid")
-    jobName = request.GET.get("jobname")
-    jobType = request.GET.get("jobtype")
-    job = myapp.models.Joblist()
-    jobInfo = job.insert_job(userId, jobName, jobType)
-    return HttpResponse(json.dumps(jobInfo), content_type='application/json')
 
 
 

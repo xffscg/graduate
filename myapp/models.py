@@ -167,6 +167,18 @@ class Datafileall(models.Model):
     def insert_file(self, user_id, filename, path, setname, separate, first, createtime):
         Datafileall.objects.create(userId=user_id, filename=filename, path=path, setname=setname, separate=separate, first=first, createtime=createtime)
 
+    def get_detail(self, file_id):
+        all_rows = Datafileall.objects.filter(fileId=file_id)
+        file_detail = dict()
+        if all_rows is not None and len(all_rows) > 0:
+            file_detail["status"] = True
+            file_detail["DATA"] = []
+            file_detail["DATA"].append({"name": "firstLine", "value": all_rows[0].first})
+            file_detail["DATA"].append({"name": "separate", "value": all_rows[0].separate})
+        else:
+            file_detail["status"] = False
+        return file_detail
+
 
 class Dataset(models.Model):
     userId = models.IntegerField(db_column='userId')  # Field name made lowercase.

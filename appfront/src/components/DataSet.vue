@@ -97,12 +97,12 @@
      },
     methods:{
       getList(){
-        this.$http.get(BASE_URL + 'get_file_list?userid='+this.userId)
+        this.$http.get(BASE_URL + 'data/get_file_list?userid='+this.userId)
           .then((response) => {
             console.log(response.body);
             this.dataList = response.body.DATA;
-            var i;
-            for(i in this.dataList){
+            this.set_option = [];
+            for(let i in this.dataList){
               this.set_option.push(this.dataList[i].setname);
             }
           }, (response) => {
@@ -144,7 +144,7 @@
 					console.log(formData.get('file'));
 					var that = this;
 					$.ajax({
-						url:BASE_URL +'uploadDataFile',
+						url:BASE_URL +'data/uploadDataFile',
 						type:'POST',
 						data:formData,
 						processData:false,

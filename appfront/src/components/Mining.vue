@@ -10,7 +10,7 @@
           <template slot="title">
             <span>数据</span>
           </template>
-          <el-submenu v-for="item in allList.datalist" :index="item.index">
+          <el-submenu v-for="item in allList.datalist" :index="item.index" :key="item.index">
             <template slot="title"><span>{{item.setname}}</span></template>
             <draggable  v-model="item.subFile" v-bind="{group:{name:'data', pull:'clone', put:false }}" @start="isDragging=true" @end="isDragging=false">
               <li v-for="file in item.subFile" :key="item.id">
@@ -25,7 +25,7 @@
           <template slot="title">
             <span>算法</span>
           </template>
-          <el-submenu v-for="item in allList.alglist" :index="item.index">
+          <el-submenu v-for="item in allList.alglist" :index="item.index" :key="item.index">
             <template slot="title"><span>{{item.Name}}</span></template>
             <draggable  v-model="item.subFile" v-bind="{group:{name:'alg', pull:'clone', put:false }}" @start="isDragging=true" @end="isDragging=false">
               <li class="list-group-item" v-for="file in item.subFile" :key="item.id">
@@ -58,7 +58,7 @@
           <input type="text" v-model="item.value"></input>
         </div>
       </form>
-      <button class="submitButton" type="button" @click="submitConfig">保存</button>
+      <button class="submitButton" type="button" @click="submitConfig" id="saveButton" style="display: none;">保存</button>
     </div>
     <div class="center1">
       <div class="newJob" @click="showCreate = true">
@@ -153,7 +153,8 @@
           funcId : null,
           funcPara :null
         },
-        detailInfo : [],
+        detailInfo : null,
+        detailType :null,
         dataDis : false,
         algDis : false,
         modelDis : false,
@@ -171,9 +172,13 @@
     mounted() {
       let session = window.sessionStorage;
       this.userId =  session.getItem('userId');
+      console.log(session.getItem('userId'));
       this.getList();
+      console.log(session.getItem('jobId'));
       if(session.getItem('jobId')){
         this.jobInfo.jobId = session.getItem('jobId')
+        console.log(session.getItem('jobId'));
+        console.log(this.jobInfo.jobId)
         this.jobInfo.jobType = session.getItem('jobType')
         $("#workPart").css("display", "block");
         if(this.jobInfo.jobType == 1){
@@ -219,27 +224,33 @@
 		        });
       },
       getDetailClick(){
+          $("#saveButton").css("display", "inline-block");
           if($(event.target)[0].id == "dataBox"){
-            console.log(this.jobInfo);
+            this.detailType = 1;
+            this.detailInfo = this.deepCopy(this.jobInfo.dataPara);
           }else if($(event.target)[0].id == "algBox"){
-            console.log("alg");
+            this.detailType =2;
+            this.detailInfo = this.deepCopy(this.jobInfo.funcPara);
           }else if($(event.target)[0].id == "modelBox"){
+            this.detailType = 3;
             console.log("model");
           }
       },
       getDetailFirst(type){
+          $("#saveButton").css("display", "inline-block");
           if(type == "data"){
             this.getDataDetail();
-            console.log(this.jobInfo);
           }else if(type == "alg"){
+            this.getAlgDetail();
             console.log("alg");
           }else if(type == "model"){
+            this.detailType = 3;
             console.log("model");
           }
       },
       getDataDetail(){
         this.$http.get(BASE_URL + 'data/get_data_detail?fileid='+this.jobInfo.dataId).then((response) => {
-          console.log(response.body);
+          this.detailType = 1;
           this.jobInfo.dataPara = response.body.DATA;
           this.detailInfo = this.deepCopy(response.body.DATA);
           console.log(this.detailInfo);
@@ -248,8 +259,30 @@
           alert("获取数据信息失败，请刷新重试哦");
         });
       },
-      submitConfig(){},
+      getAlgDetail(){
+        this.$http.get(BASE_URL + 'data/get_alg_detail?algid='+this.jobInfo.funcId).then((response) => {
+          console.log(response.body.DATA);
+          this.detailType = 2;
+          this.jobInfo.funcPara = response.body.DATA;
+          this.detailInfo = this.deepCopy(response.body.DATA);
+          console.log(this.detailInfo);
+        }, (response) => {
+          console.log('请求失败了');
+          alert("获取数据信息失败，请刷新重试哦");
+        });
+      },
+      submitConfig(){
+        if(this.detailType == 1){
+          this.jobInfo.dataPara = this.deepCopy(this.detailInfo);
+          this.detailInfo = [];
+        }else if(this.detailType == 2){
+          this.jobInfo.funcPara = this.deepCopy(this.detailInfo);
+          this.detailInfo = [];
+        }
+        $("#saveButton").css("display", "none");
+      },
       newJob(){
+        let session = window.sessionStorage;
         if(this.jobInfo.jobName == ""){
           alert("任务名不能为空")
         }else{
@@ -259,14 +292,17 @@
           }else{
             this.jobInfo.jobType = 0;
           }
+          session.setItem('jobType',this.jobInfo.jobType);
           this.$http.get(BASE_URL + 'job/new_job?userid='+this.userId + "&jobname=" + this.jobInfo.jobName
           + "&jobtype=" + this.jobInfo.jobType)
             .then((response) => {
               console.log(response.body);
-              this.jobInfo.jobId = response.body.jobId
-              let session = window.sessionStorage;
-              session.setItem('jobId',this.jobInfo.id);
-              session.setItem('jobType',this.jobInfo.jobType);
+              console.log(response.body.jobId);
+              this.jobInfo.jobId = response.body.jobId;
+              console.log(this.jobInfo.jobId);
+              session.setItem('jobId',response.body.jobId);
+              console.log(session.getItem('jobId'));
+              console.log(session.getItem('jobType'));
               this.showCreate = false;
               $("#workPart").css("display", "block");
               if(this.jobInfo.jobType == 1){
@@ -299,7 +335,22 @@
           this.jobInfo.funcPara = null;
         }
       },
-      goRun(){}
+      goRun(){
+        $.ajax({
+          url:BASE_URL +'job/go_run',
+          type:'POST',
+          data:JSON.stringify(this.jobInfo),
+          // contentType : 'application/json',
+	        // dataType : 'json',
+          // processData:false,
+        }).done(function (response) {
+          console.log(response);
+        }).fail(function (response) {
+          alert("fail");
+          }
+        );
+
+      }
     },
     watch: {
 			isDragging(newValue) {
@@ -347,6 +398,7 @@
     right: 0;
     margin-right: 10px;
     margin-left: 10px;
+    text-align: center;
   }
   input[type="text"]:focus{
     border: #87CEFF 2px solid;

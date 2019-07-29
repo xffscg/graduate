@@ -11,10 +11,13 @@ urlpatterns = [
     url(r'data/get_data_detail$', myapp.data.views.get_data_detail, ),
     # job
     url(r'job/new_job$', myapp.job.views.new_job, ),
+    url(r'job/go_run$', myapp.job.views.go_run, ),
+    # all
     url(r'result_list$', myapp.views.result_list, ),
     url(r'model_list$', myapp.views.model_list, ),
     url(r'get_all$', myapp.views.get_all, ),
     url(r'user_register$', myapp.views.userRegister, ),
     url(r'user_login$', myapp.views.userLogin, ),
+    url(r'data/get_alg_detail$', myapp.views.get_alg_detail, ),
     # url(r'new_job$', myapp.views.new_job, ),
 ]

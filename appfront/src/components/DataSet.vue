@@ -155,9 +155,6 @@
 						that.getList();
 					})
 					.fail(function(res){console.log(res);});
-					this.$nextTick(() => {
-						this.dialogVisible2 =false;
-					})
 				}
 			},
     },

@@ -10,6 +10,14 @@ from time import strftime
 # Create your views here.
 
 
+user_set = myapp.models.User()
+result_file = myapp.models.Result()
+model_file = myapp.models.Model()
+set_file = myapp.models.Datasetall()
+data_file = myapp.models.Datafileall()
+alg_file = myapp.models.Algo()
+
+
 def hello(request):
     s = 'helloWord!'
     html = '<html><head></head><body><h1> xxxxxxxxx</h1><p> %s </p></body></html>'
@@ -19,7 +27,6 @@ def hello(request):
 def userRegister(request):
     user_name = request.GET.get("username")
     password = request.GET.get("password")
-    user_set = myapp.models.User()
     register_result = user_set.register_user(user_name, password)
     return HttpResponse(json.dumps(register_result), content_type='application/json')
 
@@ -27,21 +34,18 @@ def userRegister(request):
 def userLogin(request):
     user_name = request.GET.get("username")
     password = request.GET.get("password")
-    user_set = myapp.models.User()
     login_result = user_set.login_user(user_name, password)
     return HttpResponse(json.dumps(login_result), content_type='application/json')
 
 
 def result_list(request):
     user_id = request.GET.get("userid")
-    result_file = myapp.models.Result()
     output_result = result_file.get_result(user_id)
     return HttpResponse(json.dumps(output_result), content_type='application/json')
 
 
 def model_list(request):
     user_id = request.GET.get("userid")
-    model_file = myapp.models.Model()
     output_model = model_file.get_model(user_id)
     return HttpResponse(json.dumps(output_model), content_type='application/json')
 
@@ -51,8 +55,6 @@ def get_all(request):
     output = dict()
     output["data_status"] = True
     output["DATA"] = dict()
-    set_file = myapp.models.Datasetall()
-    data_file = myapp.models.Datafileall()
     set_list = set_file.get_all_set(user_id)
     list1 = dict()
     list1["datalist"] = []
@@ -129,6 +131,13 @@ def get_all(request):
         list1["modellist"] = output_model['DATA']
     output['DATA'] = list1
     return HttpResponse(json.dumps(output), content_type='application/json')
+
+
+def get_alg_detail(request):
+    alg_id = request.GET.get("algid")
+    alg_res = alg_file.get_alg_para(alg_id)
+    return HttpResponse(json.dumps(alg_res), content_type='application/json')
+
 
 
 

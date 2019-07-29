@@ -5,6 +5,7 @@
 #   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+
 from django.db import models
 import json
 from datetime import date, datetime
@@ -27,6 +28,17 @@ class Algo(models.Model):
     class Meta:
         managed = False
         db_table = 'algo'
+
+    def get_alg_para(self, alg_id):
+        all_rows = Algo.objects.filter(id=alg_id)
+        alg_res = dict()
+        if all_rows is not None and len(all_rows) > 0:
+            alg_res["status"] = True
+            alg_res["DATA"] = []
+            para = json.loads(all_rows[0].algopara)
+            for item in para:
+                alg_res["DATA"].append(item)
+        return alg_res
 
 
 class AuthGroup(models.Model):
@@ -146,6 +158,7 @@ class Datafileall(models.Model):
     separate = models.CharField(max_length=10, blank=True, null=True)
     first = models.CharField(max_length=10, blank=True, null=True)  # Field name made lowercase.
     createtime = models.CharField(db_column='createtime', max_length=40, blank=True, null=True)
+    testWeight = models.FloatField(db_column='testWeight')
 
     class Meta:
         managed = False
@@ -173,8 +186,11 @@ class Datafileall(models.Model):
         if all_rows is not None and len(all_rows) > 0:
             file_detail["status"] = True
             file_detail["DATA"] = []
+            file_detail["DATA"].append({"name": "filename", "value": all_rows[0].filename})
+            file_detail["DATA"].append({"name": "path", "value": all_rows[0].path})
             file_detail["DATA"].append({"name": "firstLine", "value": all_rows[0].first})
             file_detail["DATA"].append({"name": "separate", "value": all_rows[0].separate})
+            file_detail["DATA"].append({"name": "testWeight", "value": all_rows[0].testWeight})
         else:
             file_detail["status"] = False
         return file_detail
@@ -224,7 +240,6 @@ class Datasetall(models.Model):
                 output_set["DATA"].append(row_dict)
         else:
             output_set["data_status"] = False
-        print(output_set)
         return output_set
 
 
@@ -341,9 +356,12 @@ class Joblist(models.Model):
         new_job_res["status"] = True
         new_job_res["jobId"] = job_id
         return new_job_res
-        # Joblist.objects.create(userId=job_info.userId, jobName=job_info.jobName, jobStatus=job_info.jobStatus,
-        #                        jobType=job_info.jobType, dataId=job_info.dataId, dataPara=job_info.dataPara,
-        #                        funcId=job_info.funcId, funcPara=job_info.funcPara)
+
+    def update_para(self, job_info, res):
+        Joblist.objects.filter(jobId=job_info.get("jobId"))\
+            .update(jobStatus=2, dataId=job_info.get("dataId"), dataPara=job_info.get("dataPara"),
+                    funcId=job_info.get("funcId"), funcPara=job_info.get("funcPara"), result=res)
+        return True
 
 
 class Model(models.Model):

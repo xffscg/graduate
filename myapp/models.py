@@ -351,7 +351,7 @@ class Joblist(models.Model):
     def insert_job(self, userId, jobName, jobType):
         Joblist.objects.create(userId=userId, jobName=jobName, jobStatus=0, jobType=jobType)
         job_all = Joblist.objects.all()
-        job_id = len(job_all)-1
+        job_id = len(job_all)
         new_job_res = dict()
         new_job_res["status"] = True
         new_job_res["jobId"] = job_id

@@ -11,6 +11,7 @@ from sklearn import model_selection
 from sklearn import linear_model
 from sklearn import preprocessing
 from sklearn.metrics import mean_squared_error
+from sklearn.tree import DecisionTreeClassifier
 import numpy as np
 import pandas as pd
 
@@ -29,10 +30,16 @@ def new_job(request):
 
 def go_run(request):
     job_info = json.loads(request.body)
+    print(job_info.get("funcId"))
+    print(type(job_info.get("jobType")))
     run_res = []
-    if job_info.get("jobType") == "1":
+    if job_info.get("jobType") == 1:
+        print("type right")
         if job_info.get("funcId") == 9:
             run_res = linear_regression(job_info)
+        elif job_info.get("funcId") == 3:
+            print("funcType")
+            run_res = decision_tree(job_info)
     job_file.update_para(job_info, run_res)
     return HttpResponse(json.dumps("Success"), content_type='application/json')
 
@@ -51,6 +58,12 @@ def linear_regression(job_info):
     linear_res.append({"name": "rmse", "value": rmse})
     return linear_res
 
+
+def decision_tree(job_info):
+    data_train, data_test, label_train, label_test = get_data(job_info.get("dataId"))
+    decision_tree_classifier = DecisionTreeClassifier()
+    decision_tree_model = decision_tree_classifier.fit(data_train, label_train)
+    return decision_tree_model
 
 
 def get_data(file_id):

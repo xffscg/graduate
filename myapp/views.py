@@ -111,6 +111,17 @@ def get_all(request):
             "id": 10,
             "type": "alg",
             "fileName": "岭回归"
+        }]}, {
+        "Name": "聚类",
+        "index": "2-4",
+        "subFile": [{
+            "id": 11,
+            "type": "alg",
+            "fileName": "K-Means"
+        }, {
+            "id": 12,
+            "type": "alg",
+            "fileName": "层次聚类"
         }]}]
     index = 1
     if set_list["data_status"]:

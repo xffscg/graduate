@@ -82,7 +82,7 @@
         fileInfo:{
           name:'',
           firstLine:0,
-          separate:'',
+          separate:',',
           fileType:'',
         },
         set_option:[],

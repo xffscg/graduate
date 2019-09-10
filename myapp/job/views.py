@@ -12,12 +12,15 @@ from sklearn import linear_model
 from sklearn import preprocessing
 from sklearn.metrics import mean_squared_error
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.externals import joblib
 import numpy as np
 import pandas as pd
 
 
 job_file = myapp.models.Joblist()
 data_file = myapp.models.Datafileall()
+path = r'D:\bupt\upload\all_model_folder'
+model = None
 
 
 def new_job(request):
@@ -30,32 +33,32 @@ def new_job(request):
 
 def go_run(request):
     job_info = json.loads(request.body)
-    print(job_info.get("funcId"))
-    print(type(job_info.get("jobType")))
-    run_res = []
+    run_res = dict()
     if job_info.get("jobType") == 1:
-        print("type right")
         if job_info.get("funcId") == 9:
             run_res = linear_regression(job_info)
         elif job_info.get("funcId") == 3:
-            print("funcType")
             run_res = decision_tree(job_info)
-    job_file.update_para(job_info, run_res)
-    return HttpResponse(json.dumps("Success"), content_type='application/json')
+    job_file.update_para(job_info, run_res["result"])
+    return HttpResponse(json.dumps(run_res), content_type='application/json')
 
 
 def linear_regression(job_info):
     data_train, data_test, label_train, label_test = get_data(job_info.get("dataId"))
     linearReg = linear_model.LinearRegression()
-    linearReg.fit(data_train, label_train)
+    linear_reg_model = linearReg.fit(data_train, label_train)
+    current_path = path + "\\" + "linearRegression" + str(job_info.get("jobId")) + ".pkl"
+    joblib.dump(linear_reg_model, current_path)
     predict_res = linearReg.predict(data_test)
     mse = mean_squared_error(label_test, predict_res)
     rmse = np.sqrt(mse)
-    linear_res = []
-    linear_res.append({"name": "intercept", "value": linearReg.intercept_})
-    linear_res.append({"name": "coefficient", "value": linearReg.coef_})
-    linear_res.append({"name": "mse", "value": mse})
-    linear_res.append({"name": "rmse", "value": rmse})
+    linear_res = dict()
+    linear_res["result"] = []
+    linear_res["result"].append({"name": "intercept", "value": linearReg.intercept_})
+    linear_res["result"].append({"name": "coefficient", "value": linearReg.coef_})
+    linear_res["result"].append({"name": "mse", "value": mse})
+    linear_res["result"].append({"name": "rmse", "value": rmse})
+    linear_res["path"] = current_path
     return linear_res
 
 

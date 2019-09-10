@@ -51,13 +51,41 @@
       </el-menu>
     </div>
     <div class="right1">
-      <h3>配置区</h3>
-      <form v-model="detailInfo">
-        <div class="formItem" v-for="item in detailInfo">
-          <label>{{item.name}}</label>
-          <input type="text" v-model="item.value"></input>
-        </div>
-      </form>
+      <div id="detailForData" v-if="detailType === 1">
+        <h3>配置信息</h3>
+        <form v-model="detailInfo">
+          <div class="formItem">
+            <label>{{detailInfo[0].name}}  : {{detailInfo[0].value}}</label>
+          </div>
+          <div class="formItem">
+            <label>{{detailInfo[1].name}}  : {{detailInfo[1].value}}</label>
+          </div>
+          <div class="formItem">
+            <label>{{detailInfo[2].name}}</label>
+            <input type="text" v-model="detailInfo[2].value"></input>
+          </div>
+          <div class="formItem">
+            <label>{{detailInfo[3].name}}</label>
+            <input type="text" v-model="detailInfo[3].value"></input>
+          </div>
+          <div class="formItem">
+            <label>{{detailInfo[4].name}}</label>
+            <input type="text" v-model="detailInfo[4].value"></input>
+          </div>
+        </form>
+      </div>
+      <div id="detailForAlg" v-if="detailType === 2">
+        <h3>配置信息</h3>
+        <form v-model="detailInfo">
+          <div class="formItem" v-for="item in detailInfo">
+            <label>{{item.name}}</label>
+            <input type="text" v-model="item.value"></input>
+          </div>
+        </form>
+      </div>
+      <div id="runResult" v-if="detailType === 9">
+        <h3>运行结果</h3>
+      </div>
       <button class="submitButton" type="button" @click="submitConfig" id="saveButton" style="display: none;">保存</button>
     </div>
     <div class="center1">
@@ -160,6 +188,7 @@
         modelDis : false,
         showCreate : false,
         showWork : false,
+        runResult : null,
         isDragging: false,
         delayedDragging: false,
         jobList :{
@@ -179,7 +208,7 @@
         this.jobInfo.jobId = session.getItem('jobId')
         console.log(session.getItem('jobId'));
         console.log(this.jobInfo.jobId)
-        this.jobInfo.jobType = session.getItem('jobType')
+        this.jobInfo.jobType = parseInt(session.getItem('jobType'));
         $("#workPart").css("display", "block");
         if(this.jobInfo.jobType == 1){
           $("#algPart").css("display", "block");
@@ -239,10 +268,11 @@
       getDetailFirst(type){
           $("#saveButton").css("display", "inline-block");
           if(type == "data"){
+            this.configId = 99;
             this.getDataDetail();
           }else if(type == "alg"){
+            this.configId = this.jobInfo.funcId;
             this.getAlgDetail();
-            console.log("alg");
           }else if(type == "model"){
             this.detailType = 3;
             console.log("model");
@@ -345,6 +375,8 @@
           // processData:false,
         }).done(function (response) {
           console.log(response);
+          this.runResult = response.body;
+          this.detailType = 9;
         }).fail(function (response) {
           alert("fail");
           }

@@ -10,6 +10,7 @@ from time import strftime
 set_file = myapp.models.Datasetall()
 data_file = myapp.models.Datafileall()
 
+
 def uploadDataFile(request):
     path = r'D:\bupt\upload'
     set_name = request.POST.get('name')

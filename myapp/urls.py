@@ -19,5 +19,4 @@ urlpatterns = [
     url(r'user_register$', myapp.views.userRegister, ),
     url(r'user_login$', myapp.views.userLogin, ),
     url(r'data/get_alg_detail$', myapp.views.get_alg_detail, ),
-    # url(r'new_job$', myapp.views.new_job, ),
 ]

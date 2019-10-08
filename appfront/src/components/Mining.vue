@@ -52,7 +52,7 @@
     </div>
     <div class="right1">
       <div id="detailForData" v-if="detailType === 1">
-        <h3>配置信息</h3>
+        <h3>配置区</h3>
         <form v-model="detailInfo">
           <div class="formItem">
             <label>{{detailInfo[0].name}}  : {{detailInfo[0].value}}</label>
